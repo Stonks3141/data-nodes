@@ -1,0 +1,145 @@
+.foreignObject {
+	width: 0;
+	height: 0;
+	overflow: visible;
+}
+
+.node {
+	background-color: var(--surface);
+	min-width: 180px;
+	font-size: 0.9rem;
+	margin: 4px;
+	padding-bottom: 8px;
+	display: flex;
+	flex-direction: column;
+	border-radius: 6px;
+	user-select: none;
+	--shadow-color: 0deg 0% 0%;
+	box-shadow:
+		0.1px 0.4px 0.6px hsl(var(--shadow-color) / 0.04),
+		0.5px 3.3px 4.8px -0.2px hsl(var(--shadow-color) / 0.15),
+		1.4px 10.2px 14.7px -0.5px hsl(var(--shadow-color) / 0.27);
+
+	&:focus-within {
+		outline: 1px white solid;
+	}
+
+	input[type="number"] {
+		background-color: var(--overlay);
+		border: none;
+		border-radius: 4px;
+		outline: none;
+		color: var(--text);
+		font-size: 1em;
+		text-align: right;
+		width: 100%;
+		margin-right: 12px;
+		padding-top: 3px;
+		padding-bottom: 2px;
+	}
+
+	summary {
+		background-color: var(--primary);
+		padding: 3px;
+		padding-left: 6px;
+		margin-bottom: 4px;
+		border-radius: 6px 6px 0 0;
+		list-style-image: url('assets/down-arrow.svg');
+	}
+	&:not([open]) summary {
+		list-style-image: url('assets/right-arrow.svg');
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	ul li {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 4px 0;
+
+		circle {
+			fill: var(--data-float);
+			.number & { fill: var(--data-float) }
+			.vector & { fill: var(--data-vector) }
+			.select & { fill: var(--data-float) }
+		}
+
+		&.out + &.in {
+			padding-top: 8px;
+		}
+
+		&.out {
+			justify-content: flex-end;
+
+			svg {
+				position: relative;
+				left: 4px;
+			}
+		}
+
+		&.in {
+			justify-content: flex-start;
+
+			svg {
+				position: relative;
+				right: 4px;
+			}
+
+			&.number {
+				+ .number { padding-top: 0 }
+				&.linked input { display: none }
+
+				span {
+					position: relative;
+					left: 8px;
+					width: 0;
+					padding-bottom: 2px;
+				}
+			}
+
+			&.vector {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 1px;
+
+				& :first-child {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					gap: 2px;
+					margin-bottom: 4px;
+					.linked & { margin-bottom: 0 }
+				}
+
+				input {
+					width: 89%;
+					margin-left: 8px;
+					margin-right: 16px;
+
+					&:nth-child(2) { border-radius: 4px 4px 0 0 }
+					&:nth-child(3) { border-radius: 0 }
+					&:nth-child(4) { border-radius: 0 0 4px 4px }
+
+					.linked & { display: none }
+				}
+			}
+
+			&.select select {
+				background-color: color-mix(in srgb, var(--base) 50%, var(--surface));
+				color: var(--text);
+				border: 1px solid color-mix(in srgb, var(--overlay) 50%, var(--surface));
+				border-radius: 4px;
+				width: 100%;
+				margin-right: 12px;
+				padding: 3px 1px;
+
+				.linked & { display: none }
+			}
+		}
+	}
+}

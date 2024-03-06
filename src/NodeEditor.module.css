@@ -1,0 +1,5 @@
+.link {
+	fill: none;
+	stroke: var(--data-float);
+	stroke-width: 2;
+}

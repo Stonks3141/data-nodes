@@ -1,0 +1,28 @@
+/*@font-face {
+	font-family: 'Inter';
+	src: url('Inter.ttf');
+}*/
+
+:root {
+	--base: #121212;
+	--surface: #242424;
+	--overlay: #484848;
+	--text: #ffffff;
+	--primary: #1c4c87;
+
+	--data-any: #36c965;
+	--data-float: #a0a0a0;
+	--data-vector: #5e29d9;
+
+	font-family: 'Inter', Helvetica, sans-serif;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: var(--base);
+	color: var(--text);
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+}
