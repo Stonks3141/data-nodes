@@ -50,12 +50,12 @@ export type MathOp = typeof MathOp;
 
 export interface MathInputs {
 	op: MathOp,
-	a: number | TypedArray,
-	b: number | TypedArray,
+	a: number | Float32Array,
+	b: number | Float32Array,
 }
 
 export interface MathOutputs {
-	out: boolean | number | TypedArray,
+	out: boolean | number | Float32Array,
 }
 
 export const MathC = ({ id, x, y, inputs }: NodeComponentProps<MathInputs>) => {
@@ -127,7 +127,7 @@ const mathFunc = ({ op, a, b }: MathInputs): MathOutputs => {
 		if (typeof b === 'number') {
 			return { out: doMathOp(op, a, b) };
 		} else {
-			const out = new Float64Array(b.length);
+			const out = new Float32Array(b.length);
 			for (let i = 0; i < out.length; i++) {
 				out[i] = doMathOp(op, a, b[i]);
 			}
@@ -135,13 +135,13 @@ const mathFunc = ({ op, a, b }: MathInputs): MathOutputs => {
 		}
 	} else {
 		if (typeof b === 'number') {
-			const out = new Float64Array(a.length);
+			const out = new Float32Array(a.length);
 			for (let i = 0; i < out.length; i++) {
 				out[i] = doMathOp(op, a[i], b);
 			}
 			return { out };
 		} else {
-			const out = new Float64Array(Math.min(a.length, b.length));
+			const out = new Float32Array(Math.min(a.length, b.length));
 			for (let i = 0; i < out.length; i++) {
 				out[i] = doMathOp(op, a[i], b[i]);
 			}

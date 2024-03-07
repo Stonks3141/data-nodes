@@ -2,12 +2,12 @@ import { NodeShell, InputArray, OutputNumber, NodeComponentProps, NodeInfo } fro
 import { intersperse } from '../wasm.ts';
 
 export interface IntersperseInputs {
-	a: Float64Array,
-	b: Float64Array,
+	a: Float32Array,
+	b: Float32Array,
 }
 
 export interface IntersperseOutputs {
-	out: Float64Array,
+	out: Float32Array,
 }
 
 export const Intersperse = ({ id, x, y, inputs }: NodeComponentProps<IntersperseInputs>) => {

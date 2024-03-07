@@ -2,11 +2,11 @@ import { NodeShell, InputArray, OutputNumber, NodeComponentProps, NodeInfo } fro
 import { fft } from '../wasm.ts';
 
 export interface FourierInputs {
-	data: Float64Array,
+	data: Float32Array,
 }
 
 export interface FourierOutputs {
-	data: Float64Array,
+	data: Float32Array,
 }
 
 export const Fourier = ({ id, x, y, inputs }: NodeComponentProps<FourierInputs>) => {
@@ -21,5 +21,5 @@ export const Fourier = ({ id, x, y, inputs }: NodeComponentProps<FourierInputs>)
 export const FourierNode: NodeInfo<FourierInputs, FourierOutputs> = {
 	component: Fourier,
 	func: ({ data }) => ({ data: fft(data) }),
-	inputs: { data: new Float64Array(0) },
+	inputs: { data: new Float32Array(0) },
 };

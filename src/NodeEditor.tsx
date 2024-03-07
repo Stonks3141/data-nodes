@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'preact/hooks';
+import { useEffect, useMemo, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
 import { nodeRegistry } from './nodes';
 import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
@@ -187,6 +187,17 @@ export const NodeEditor = () => {
 		onInMouseDown,
 		onInMouseUp,
 	};
+
+	const onKeyDown = (event: KeyboardEvent) => {
+		if (event.code === 'KeyX') {
+			alert('X');
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('keydown', onKeyDown);
+		return () => document.removeEventListener('keydown', onKeyDown);
+	}, []);
 
 	const onBgMouseDown = () => {
 		const onMouseMove = (event: MouseEvent) => batch(() => {

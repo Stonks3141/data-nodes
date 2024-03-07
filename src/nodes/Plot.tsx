@@ -13,7 +13,8 @@ export const Plot = ({ id, x, y, inputs }: NodeComponentProps<PlotInputs>) => {
 	const dy = 0;
 	let path = '';
 	if (data !== null && data.length > 3) {
-		for (let i = 0; i < data.length - data.length % 2; i += 2) {
+		for (let i = 0; i < data.length; i += Math.max(1, Math.floor(data.length / 1000))) {
+			if (i >= data.length) break;
 			path += (i ? 'L' : 'M') + (data[i] * scale + dx) + ' ' + (data[i+1] * scale + dy);
 		}
 	}

@@ -8,7 +8,7 @@ export interface LinspaceInputs {
 }
 
 export interface LinspaceOutputs {
-	data: Float64Array,
+	data: Float32Array,
 }
 
 export const Linspace = ({ id, x, y, inputs }: NodeComponentProps<LinspaceInputs>) => {
