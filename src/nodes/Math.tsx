@@ -1,3 +1,4 @@
+import { mathS, mathV, mathSS, mathSV, mathVS, mathVV } from '../wasm.ts';
 import { NodeShell, InputNumber, InputSelect, OutputNumber, NodeComponentProps, NodeInfo } from '../node.tsx';
 
 export enum MathOpFunc {
@@ -5,7 +6,7 @@ export enum MathOpFunc {
 	Sub = 'Subtract',
 	Mul = 'Multiply',
 	Div = 'Divide',
-	Power = 'Power',
+	Pow = 'Power',
 	Log = 'Logarithm',
 	Sqrt = 'Square Root',
 	Exp = 'Exponent',
@@ -13,8 +14,8 @@ export enum MathOpFunc {
 export enum MathOpCmp {
 	Min = 'Minimum',
 	Max = 'Maximum',
-	Less = 'Less Than',
-	Greater = 'Greater Than',
+	Lt = 'Less Than',
+	Gt = 'Greater Than',
 	Sign = 'Sign',
 }
 export enum MathOpRound {
@@ -48,6 +49,52 @@ export enum MathOpConv {
 export const MathOp = { ...MathOpFunc, ...MathOpCmp, ...MathOpRound, ...MathOpTrig, ...MathOpConv };
 export type MathOp = typeof MathOp;
 
+const binaryOps = {
+	[MathOp.Add]: (a, b) => a + b,
+	[MathOp.Sub]: (a, b) => a - b,
+	[MathOp.Mul]: (a, b) => a * b,
+	[MathOp.Div]: (a, b) => a / b,
+	[MathOp.Pow]: (a, b) => a ** b,
+	[MathOp.Log]: (a, b) => Math.log(b) / Math.log(a),
+
+	[MathOp.Max]: Math.max,
+	[MathOp.Min]: Math.min,
+	[MathOp.Lt]: (a, b) => a < b,
+	[MathOp.Gt]: (a, b) => a > b,
+
+	[MathOp.Mod]: (a, b) => a % b,
+	[MathOp.Snap]: (a, b) => Math.round(a / b) * b,
+
+	[MathOp.Atan2]: Math.atan2,
+};
+
+const unaryOps = {
+	[MathOp.Sqrt]: Math.sqrt,
+	[MathOp.Exp]: Math.exp,
+
+	[MathOp.Sign]: Math.sign,
+
+	[MathOp.Round]: Math.round,
+	[MathOp.Floor]: Math.floor,
+	[MathOp.Ceil]: Math.ceil,
+	[MathOp.Trunc]: Math.trunc,
+	[MathOp.Frac]: x => x - Math.trunc(x),
+	[MathOp.Clamp]: x => Math.max(0, Math.min(x, 1)),
+
+	[MathOp.Sin]: Math.sin,
+	[MathOp.Cos]: Math.cos,
+	[MathOp.Tan]: Math.tan,
+	[MathOp.Asin]: Math.asin,
+	[MathOp.Acos]: Math.acos,
+	[MathOp.Atan]: Math.atan,
+	[MathOp.Sinh]: Math.sinh,
+	[MathOp.Cosh]: Math.cosh,
+	[MathOp.Tanh]: Math.tanh,
+
+	[MathOp.ToRad]: x => x / 180 * Math.PI,
+	[MathOp.ToDeg]: x => x * 180 / Math.PI,
+};
+
 export interface MathInputs {
 	op: MathOp,
 	a: number | Float32Array,
@@ -55,7 +102,7 @@ export interface MathInputs {
 }
 
 export interface MathOutputs {
-	out: boolean | number | Float32Array,
+	out: number | Float32Array,
 }
 
 export const MathC = ({ id, x, y, inputs }: NodeComponentProps<MathInputs>) => {
@@ -66,87 +113,32 @@ export const MathC = ({ id, x, y, inputs }: NodeComponentProps<MathInputs>) => {
 		'Trigonometric': Object.values(MathOpTrig),
 		'Conversion': Object.values(MathOpConv),
 	};
+	const isBinary = Object.keys(binaryOps).includes(inputs.op.value);
 	return (
 		<NodeShell name="Math" id={id} x={x} y={y}>
 			<OutputNumber name="out" label="Value" />
 			<InputSelect name="op" label="Operation" value={inputs.op} options={options} />
-			<InputNumber name="a" label="a" value={inputs.a} />
-			<InputNumber name="b" label="b" value={inputs.b}/>
+			<InputNumber name="a" label={isBinary ? 'a' : 'x'} value={inputs.a} />
+			{isBinary && <InputNumber name="b" label="b" value={inputs.b} />}
 		</NodeShell>
 	);
 };
 
-const doMathOp = (op: MathOp, a: number, b: number): number => {
-	switch (op) {
-		case MathOp.Add: return a + b;
-		case MathOp.Sub: return a - b;
-		case MathOp.Mul: return a * b;
-		case MathOp.Div: return a / b;
-		case MathOp.Power: return a ** b;
-		case MathOp.Log: return Math.log(a) / Math.log(b);
-		case MathOp.Sqrt: return Math.sqrt(a);
-		case MathOp.Exp: return Math.exp(a);
-
-		case MathOp.Min: return Math.min(a, b);
-		case MathOp.Max: return Math.max(a, b);
-		case MathOp.Less: return a < b;
-		case MathOp.Greater: return a > b;
-		case MathOp.Sign: return Math.sign(a);
-
-		case MathOp.Round: return Math.round(a);
-		case MathOp.Floor: return Math.floor(a);
-		case MathOp.Ceil: return Math.ceil(a);
-		case MathOp.Trunc: return Math.trunc(a);
-		case MathOp.Frac: return a - Math.trunc(a);
-		case MathOp.Mod: return a % b;
-		case MathOp.Snap: return Math.round(a * b) / b;
-		case MathOp.Clamp: return Math.max(0, Math.min(a, 1));
-
-		case MathOp.Sin: return Math.sin(a);
-		case MathOp.Cos: return Math.cos(a);
-		case MathOp.Tan: return Math.tan(a);
-		case MathOp.Asin: return Math.asin(a);
-		case MathOp.Acos: return Math.acos(a);
-		case MathOp.Atan: return Math.atan(a);
-		case MathOp.Atan2: return Math.atan2(a, b);
-
-		case MathOp.Sinh: return Math.sinh(a);
-		case MathOp.Cosh: return Math.cosh(a);
-		case MathOp.Tanh: return Math.tanh(a);
-
-		case MathOp.ToRad: return a / 180 * Math.PI;
-		case MathOp.ToDeg: return a * 180 / Math.PI;
-
-		default: throw new TypeError();
-	}
-};
-
 const mathFunc = ({ op, a, b }: MathInputs): MathOutputs => {
-	const countScalar = (typeof a === 'number' ? 1 : 0) + (typeof b === 'number' ? 1 : 0);
-	if (typeof a === 'number') {
-		if (typeof b === 'number') {
-			return { out: doMathOp(op, a, b) };
-		} else {
-			const out = new Float32Array(b.length);
-			for (let i = 0; i < out.length; i++) {
-				out[i] = doMathOp(op, a, b[i]);
-			}
-			return { out };
-		}
+	const ta = typeof a === 'number';
+	const tb = typeof b === 'number';
+	const opNum = Object.values(MathOp).indexOf(op);
+	if (Object.keys(unaryOps).includes(op)) {
+		return { out: ta ? mathS(opNum, a) : mathV(opNum, a) as Float32Array };
+	}
+	if (ta && tb) {
+		return { out: mathSS(opNum, a, b) };
+	} else if (ta && !tb) {
+		return { out: mathSV(opNum, a, b) as Float32Array };
+	} else if (!ta && tb) {
+		return { out: mathVS(opNum, a, b) as Float32Array };
 	} else {
-		if (typeof b === 'number') {
-			const out = new Float32Array(a.length);
-			for (let i = 0; i < out.length; i++) {
-				out[i] = doMathOp(op, a[i], b);
-			}
-			return { out };
-		} else {
-			const out = new Float32Array(Math.min(a.length, b.length));
-			for (let i = 0; i < out.length; i++) {
-				out[i] = doMathOp(op, a[i], b[i]);
-			}
-			return { out };
-		}
+		return { out: mathVV(opNum, a, b) as Float32Array };
 	}
 };
 

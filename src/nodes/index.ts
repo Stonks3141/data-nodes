@@ -1,3 +1,4 @@
+import type { NodeInfo } from '../node.tsx';
 import { CombineXYZNode } from './CombineXYZ.tsx';
 import { SeparateXYZNode } from './SeparateXYZ.tsx';
 import { ViewerNode } from './Viewer.tsx';
