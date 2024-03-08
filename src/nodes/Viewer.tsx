@@ -14,9 +14,11 @@ export const Viewer = ({ id, x, y, inputs }: NodeComponentProps<ViewerInputs>) =
 	return (
 		<NodeShell name="Viewer" id={id} x={x} y={y}>
 			<InputAny name="value" label="Value" />
-			<pre style="padding-left: 8px; white-space: pre-wrap; overflow-wrap: anywhere;">
-				{JSON.stringify(data)}
-			</pre>
+			<li>
+				<pre style="padding-left: 8px; white-space: pre-wrap; overflow-wrap: anywhere;">
+					{JSON.stringify(data)}
+				</pre>
+			</li>
 		</NodeShell>
 	);
 };

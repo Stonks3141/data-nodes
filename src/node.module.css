@@ -7,6 +7,7 @@
 .node {
 	background-color: var(--surface);
 	min-width: 180px;
+	width: fit-content;
 	font-size: 0.9rem;
 	margin: 4px;
 	padding-bottom: 8px;
@@ -33,6 +34,7 @@
 		font-size: 1em;
 		text-align: right;
 		width: 100%;
+		max-width: 200px;
 		margin-right: 12px;
 		padding-top: 3px;
 		padding-bottom: 2px;
@@ -98,6 +100,7 @@
 					position: relative;
 					left: 8px;
 					width: 0;
+					white-space: nowrap;
 					padding-bottom: 2px;
 				}
 			}
