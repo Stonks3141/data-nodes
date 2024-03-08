@@ -6,6 +6,5 @@ export const {
 	linspace,
 	intersperse,
 	unzip,
-	dft,
 	fft,
 } = await instantiate(await WebAssembly.compileStreaming(fetch(url)), {});
