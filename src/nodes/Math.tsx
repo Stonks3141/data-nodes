@@ -49,51 +49,12 @@ export enum MathOpConv {
 export const MathOp = { ...MathOpFunc, ...MathOpCmp, ...MathOpRound, ...MathOpTrig, ...MathOpConv };
 export type MathOp = typeof MathOp;
 
-const binaryOps = {
-	[MathOp.Add]: (a, b) => a + b,
-	[MathOp.Sub]: (a, b) => a - b,
-	[MathOp.Mul]: (a, b) => a * b,
-	[MathOp.Div]: (a, b) => a / b,
-	[MathOp.Pow]: (a, b) => a ** b,
-	[MathOp.Log]: (a, b) => Math.log(b) / Math.log(a),
-
-	[MathOp.Max]: Math.max,
-	[MathOp.Min]: Math.min,
-	[MathOp.Lt]: (a, b) => a < b,
-	[MathOp.Gt]: (a, b) => a > b,
-
-	[MathOp.Mod]: (a, b) => a % b,
-	[MathOp.Snap]: (a, b) => Math.round(a / b) * b,
-
-	[MathOp.Atan2]: Math.atan2,
-};
-
-const unaryOps = {
-	[MathOp.Sqrt]: Math.sqrt,
-	[MathOp.Exp]: Math.exp,
-
-	[MathOp.Sign]: Math.sign,
-
-	[MathOp.Round]: Math.round,
-	[MathOp.Floor]: Math.floor,
-	[MathOp.Ceil]: Math.ceil,
-	[MathOp.Trunc]: Math.trunc,
-	[MathOp.Frac]: x => x - Math.trunc(x),
-	[MathOp.Clamp]: x => Math.max(0, Math.min(x, 1)),
-
-	[MathOp.Sin]: Math.sin,
-	[MathOp.Cos]: Math.cos,
-	[MathOp.Tan]: Math.tan,
-	[MathOp.Asin]: Math.asin,
-	[MathOp.Acos]: Math.acos,
-	[MathOp.Atan]: Math.atan,
-	[MathOp.Sinh]: Math.sinh,
-	[MathOp.Cosh]: Math.cosh,
-	[MathOp.Tanh]: Math.tanh,
-
-	[MathOp.ToRad]: x => x / 180 * Math.PI,
-	[MathOp.ToDeg]: x => x * 180 / Math.PI,
-};
+const binaryOps = [
+	MathOp.Add, MathOp.Sub, MathOp.Mul, MathOp.Div, MathOp.Pow, MathOp.Log,
+	MathOp.Max, MathOp.Min, MathOp.Lt, MathOp.Gt,
+	MathOp.Mod, MathOp.Snap,
+	MathOp.Atan2,
+];
 
 export interface MathInputs {
 	op: MathOp,
@@ -113,7 +74,7 @@ export const MathC = ({ id, x, y, inputs }: NodeComponentProps<MathInputs>) => {
 		'Trigonometric': Object.values(MathOpTrig),
 		'Conversion': Object.values(MathOpConv),
 	};
-	const isBinary = Object.keys(binaryOps).includes(inputs.op.value);
+	const isBinary = binaryOps.includes(inputs.op.value);
 	return (
 		<NodeShell name="Math" id={id} x={x} y={y}>
 			<OutputNumber name="out" label="Value" />
@@ -128,7 +89,7 @@ const mathFunc = ({ op, a, b }: MathInputs): MathOutputs => {
 	const ta = typeof a === 'number';
 	const tb = typeof b === 'number';
 	const opNum = Object.values(MathOp).indexOf(op);
-	if (Object.keys(unaryOps).includes(op)) {
+	if (!binaryOps.includes(op)) {
 		return { out: ta ? mathS(opNum, a) : mathV(opNum, a) as Float32Array };
 	}
 	if (ta && tb) {

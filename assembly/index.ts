@@ -1,3 +1,9 @@
+const zero = f32x4(0,0,0,0);
+const one = f32x4(1,1,1,1);
+const pi = f32x4(Mathf.PI, Mathf.PI, Mathf.PI, Mathf.PI);
+const deg_to_rad = v128.div<f32>(pi, f32x4(180,180,180,180));
+const rad_to_deg = v128.div<f32>(f32x4(180,180,180,180), pi);
+
 export enum MathOp {
 	Add,
 	Sub,
@@ -42,22 +48,65 @@ function unaryMathS(op: MathOp, x: f32): f32 {
 	switch (op) {
 		case MathOp.Sqrt: return Mathf.sqrt(x);
 		case MathOp.Exp: return Mathf.exp(x);
+
 		case MathOp.Sign: return Mathf.sign(x);
+
+		case MathOp.Round: return Mathf.round(x);
+		case MathOp.Floor: return Mathf.floor(x);
+		case MathOp.Ceil: return Mathf.ceil(x);
+		case MathOp.Trunc: return Mathf.trunc(x);
+		case MathOp.Frac: return x - Mathf.trunc(x);
+		case MathOp.Clamp: return Mathf.max(0, Mathf.min(x, 1));
+
+		case MathOp.Sin: return Mathf.sin(x);
+		case MathOp.Cos: return Mathf.cos(x);
+		case MathOp.Tan: return Mathf.tan(x);
+		case MathOp.Asin: return Mathf.asin(x);
+		case MathOp.Acos: return Mathf.acos(x);
+		case MathOp.Atan: return Mathf.atan(x);
+		case MathOp.Sinh: return Mathf.sinh(x);
+		case MathOp.Cosh: return Mathf.cosh(x);
+		case MathOp.Tanh: return Mathf.tanh(x);
+
+		case MathOp.ToRad: return x / 180 * Mathf.PI;
+		case MathOp.ToDeg: return x * 180 / Mathf.PI;
 		default: return 0;
 	}
 }
 
 function unaryMathV(op: MathOp, x: v128): v128 {
-	const zero = f32x4(0,0,0,0);
 	switch (op) {
 		case MathOp.Sqrt: return v128.sqrt<f32>(x);
-		case MathOp.Exp: return f32x4(
-			Mathf.exp(v128.extract_lane<f32>(x, 0)),
-			Mathf.exp(v128.extract_lane<f32>(x, 1)),
-			Mathf.exp(v128.extract_lane<f32>(x, 2)),
-			Mathf.exp(v128.extract_lane<f32>(x, 3)),
-		);
+
 		case MathOp.Sign: return v128.sub<f32>(v128.gt<f32>(x, zero), v128.lt<f32>(x, zero));
+
+		case MathOp.Round: return v128.nearest<f32>(x);
+		case MathOp.Floor: return v128.floor<f32>(x);
+		case MathOp.Ceil: return v128.ceil<f32>(x);
+		case MathOp.Trunc: return v128.trunc<f32>(x);
+		case MathOp.Frac: return v128.sub<f32>(x, v128.trunc<f32>(x));
+		case MathOp.Clamp: return v128.max<f32>(zero, v128.min<f32>(x, one));
+
+		case MathOp.ToRad: return v128.mul<f32>(x, deg_to_rad);
+		case MathOp.ToDeg: return v128.mul<f32>(x, rad_to_deg);
+
+		// fallthrough
+		case MathOp.Exp:
+		case MathOp.Sin:
+		case MathOp.Cos:
+		case MathOp.Tan:
+		case MathOp.Asin:
+		case MathOp.Acos:
+		case MathOp.Atan:
+		case MathOp.Sinh:
+		case MathOp.Cosh:
+		case MathOp.Tanh:
+			return f32x4(
+				unaryMathS(op, v128.extract_lane<f32>(x, 0)),
+				unaryMathS(op, v128.extract_lane<f32>(x, 1)),
+				unaryMathS(op, v128.extract_lane<f32>(x, 2)),
+				unaryMathS(op, v128.extract_lane<f32>(x, 3)),
+			);
 		default: return zero;
 	}
 }
@@ -68,6 +117,18 @@ function binaryMathS(op: MathOp, a: f32, b: f32): f32 {
 		case MathOp.Sub: return a - b;
 		case MathOp.Mul: return a * b;
 		case MathOp.Div: return a / b;
+		case MathOp.Pow: return Mathf.pow(a, b);
+		case MathOp.Log: return Mathf.log(b) / Mathf.log(a);
+
+		case MathOp.Max: return Mathf.max(a, b);
+		case MathOp.Min: return Mathf.min(a, b);
+		case MathOp.Lt: return a < b ? 1 : 0;
+		case MathOp.Gt: return a > b ? 1 : 0;
+
+		case MathOp.Mod: return a % b;
+		case MathOp.Snap: return Mathf.round(a / b) * b;
+
+		case MathOp.Atan2: return Mathf.atan2(a, b);
 		default: return 0;
 	}
 };
@@ -78,6 +139,25 @@ function binaryMathV(op: MathOp, a: v128, b: v128): v128 {
 		case MathOp.Sub: return v128.sub<f32>(a, b);
 		case MathOp.Mul: return v128.mul<f32>(a, b);
 		case MathOp.Div: return v128.div<f32>(a, b);
+
+		case MathOp.Max: return v128.max<f32>(a, b);
+		case MathOp.Min: return v128.min<f32>(a, b);
+		case MathOp.Lt: return v128.lt<f32>(a, b);
+		case MathOp.Gt: return v128.gt<f32>(a, b);
+
+		case MathOp.Mod: return v128.sub<f32>(a, v128.mul<f32>(b, v128.trunc<f32>(v128.div<f32>(a, b))));
+		case MathOp.Snap: return v128.mul<f32>(v128.nearest<f32>(v128.div<f32>(a, b)), b);
+
+		// fallthrough
+		case MathOp.Pow:
+		case MathOp.Log:
+		case MathOp.Atan2:
+			return f32x4(
+				binaryMathS(op, v128.extract_lane<f32>(a, 0), v128.extract_lane<f32>(b, 0)),
+				binaryMathS(op, v128.extract_lane<f32>(a, 1), v128.extract_lane<f32>(b, 1)),
+				binaryMathS(op, v128.extract_lane<f32>(a, 2), v128.extract_lane<f32>(b, 2)),
+				binaryMathS(op, v128.extract_lane<f32>(a, 3), v128.extract_lane<f32>(b, 3)),
+			);
 		default: return f32x4(0,0,0,0);
 	}
 };
