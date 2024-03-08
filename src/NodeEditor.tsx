@@ -3,7 +3,7 @@ import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact
 import { nodeRegistry } from './nodes';
 import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
 import { InputSocket } from './dataflow.ts';
-import { AddNodeMenu } from './AddNodeMenu.tsx';
+import { Toolbar } from './Toolbar.tsx';
 import styles from './NodeEditor.module.css';
 
 export const nodeFactory = () => {
@@ -221,9 +221,16 @@ export const NodeEditor = () => {
 		scale.value *= 1 + delta;
 	});
 
+	const onNodeAdded = (node: NodeInfo) => {
+		nodes.value = nodes.value.concat(instantiateNode(100, 100, node));
+	};
+
 	return (
 		<>
-		<AddNodeMenu nodes={nodeRegistry} onClick={node => nodes.value = nodes.value.concat(instantiateNode(100, 100, node))} />
+		<header>
+			<Toolbar nodes={nodeRegistry} onNodeAdded={onNodeAdded} />
+		</header>
+		<main>
 		<svg width="100vw" height="100vh" ref={svgRef} onMouseDown={onBgMouseDown} onWheel={onBgWheel}>
 			<pattern
 				id="bg-grid-major"
@@ -251,6 +258,7 @@ export const NodeEditor = () => {
 				</SocketHandlers.Provider>
 			</g>
 		</svg>
+		</main>
 		</>
 	);
 };

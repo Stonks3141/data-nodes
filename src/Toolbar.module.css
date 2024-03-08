@@ -1,0 +1,76 @@
+.toolbar {
+	background-color: var(--surface);
+	border-bottom: 1px solid var(--overlay);
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+	> * {
+		flex-grow: 1;
+		display: flex;
+		justify-content: center;
+	}
+	:first-child, :last-child { flex-basis: 0 }
+	:first-child { justify-content: flex-start }
+	:last-child { justify-content: flex-end }
+
+	> menu {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: row;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		font-weight: normal;
+		margin: 0;
+	}
+
+	button {
+		background-color: transparent;
+		border: none;
+		outline: none;
+		padding: 1rem;
+		color: var(--text);
+		font-size: 1em;
+		:hover { background-color: var(--overlay) }
+	}
+
+	path {
+		fill: var(--text);
+	}
+}
+
+.addMenu:popover-open {
+	background-color: var(--surface);
+	list-style: none;
+	border: none;
+	position: absolute;
+	inset: unset;
+	width: auto;
+	height: auto;
+	left: 140px;
+	top: 52px;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	--shadow-color: 0deg 0% 0%;
+	box-shadow:
+		0.1px 0.4px 0.6px hsl(var(--shadow-color) / 0.04),
+		0.5px 3.3px 4.8px -0.2px hsl(var(--shadow-color) / 0.15),
+		1.4px 10.2px 14.7px -0.5px hsl(var(--shadow-color) / 0.27);
+
+	button {
+		padding: 4px;
+		width: 100%;
+		text-align: left;
+		&:hover { background-color: var(--overlay) }
+	}
+}
