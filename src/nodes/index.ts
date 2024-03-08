@@ -5,8 +5,11 @@ import { ViewerNode } from './Viewer.tsx';
 import { FourierNode } from './Fourier.tsx';
 import { LinspaceNode } from './Linspace.tsx';
 import { IntersperseNode } from './Intersperse.tsx';
+import { UnzipNode } from './Unzip.tsx';
 import { MathNode } from './Math.tsx';
 import { PlotNode } from './Plot.tsx';
+
+// TODO: ComplexMath
 
 const nodeRegistry: Record<string, NodeInfo<any>> = {
 	'Combine XYZ': CombineXYZNode,
@@ -15,6 +18,7 @@ const nodeRegistry: Record<string, NodeInfo<any>> = {
 	'Fourier Transform': FourierNode,
 	'Linspace': LinspaceNode,
 	'Intersperse': IntersperseNode,
+	'Unzip': UnzipNode,
 	'Math': MathNode,
 	'Plot': PlotNode,
 }

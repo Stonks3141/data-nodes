@@ -285,6 +285,15 @@ export function intersperse(a: StaticArray<f32>, b: StaticArray<f32>): StaticArr
 	return out;
 }
 
+export function unzip(x: StaticArray<f32>): StaticArray<f32> {
+	const out = new StaticArray<f32>(x.length);
+	for (let i = 0; i < x.length/2; i++) {
+		out[i] = x[i*2];
+		out[i + x.length/2] = x[i*2+1];
+	}
+	return out;
+}
+
 export function dft(x: StaticArray<f32>): StaticArray<f32> {
 	const out = new StaticArray<f32>(x.length);
 	for (let k = 0; k < out.length - out.length % 2; k += 2) {
@@ -292,8 +301,8 @@ export function dft(x: StaticArray<f32>): StaticArray<f32> {
 			const y = -<f32>2.0 * Mathf.PI * <f32>k / <f32>x.length * <f32>n;
 			const u = Mathf.cos(y);
 			const v = Mathf.sin(y);
-			out[k] = x[n] * u - x[n+1] * v;
-			out[k+1] = x[n] * v + x[n+1] * u;
+			out[k] += x[n] * u - x[n+1] * v;
+			out[k+1] += x[n] * v + x[n+1] * u;
 		}
 	}
 	return out;

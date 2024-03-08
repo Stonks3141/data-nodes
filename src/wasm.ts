@@ -5,6 +5,7 @@ export const {
 	mathS, mathV, mathSS, mathSV, mathVS, mathVV,
 	linspace,
 	intersperse,
+	unzip,
 	dft,
 	fft,
 } = await instantiate(await WebAssembly.compileStreaming(fetch(url)), {});
