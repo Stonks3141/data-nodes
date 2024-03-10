@@ -23,7 +23,7 @@ export const Toolbar = ({ nodes, onNodeAdded = _ => {} }: ToolbarProps) => {
 					<button popoverTarget={id}>Add</button>
 				</li>
 			</menu>
-			<h1>My Project</h1>
+			<h1>Sample Project</h1>
 			<div></div>
 		</div>
 	);

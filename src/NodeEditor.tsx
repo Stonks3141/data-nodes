@@ -63,7 +63,7 @@ export const NodeEditor = () => {
 	const instantiateNode = useMemo(nodeFactory, []);
 	const svgRef = useRef(null);
 
-	const nodes = useSignal([
+	const initialNodes = useMemo(() => [
 		instantiateNode(100, 100, nodeRegistry['Linspace']),
 		instantiateNode(350, 200, nodeRegistry['Math']),
 		instantiateNode(350, 50, nodeRegistry['Intersperse']),
@@ -71,6 +71,8 @@ export const NodeEditor = () => {
 		instantiateNode(900, 100, nodeRegistry['Viewer']),
 		instantiateNode(900, 250, nodeRegistry['Plot']),
 	]);
+
+	const nodes = useSignal(initialNodes);
 
 	const currentLink = useSignal<null | Omit<LinkData, 'to'>>(null);
 	const links = useSignal<LinkData[]>([]);
