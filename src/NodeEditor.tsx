@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef } from 'preact/hooks';
+import { useContext, useEffect, useMemo, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
+import { Pb } from './pb.ts';
 import { nodeRegistry } from './nodes';
 import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
 import { InputSocket } from './dataflow.ts';
@@ -55,7 +56,9 @@ interface LinkData extends LinkProps {
 	to: { nodeId: number, socket: string };
 }
 
-export const NodeEditor = () => {
+export const NodeEditor = ({ user, project }) => {
+	const pb = useContext(Pb);
+
 	const offsetX = useSignal(0);
 	const offsetY = useSignal(0);
 	const scale = useSignal(1);
@@ -63,20 +66,23 @@ export const NodeEditor = () => {
 	const instantiateNode = useMemo(nodeFactory, []);
 	const svgRef = useRef(null);
 
-	const initialNodes = useMemo(() => [
-		instantiateNode(100, 100, nodeRegistry['Linspace']),
-		instantiateNode(350, 200, nodeRegistry['Math']),
-		instantiateNode(350, 50, nodeRegistry['Intersperse']),
-		instantiateNode(600, 100, nodeRegistry['Fourier Transform']),
-		instantiateNode(900, 100, nodeRegistry['Viewer']),
-		instantiateNode(900, 250, nodeRegistry['Plot']),
-	]);
-
-	const nodes = useSignal(initialNodes);
+	const nodes = useSignal([]);
 
 	const currentLink = useSignal<null | Omit<LinkData, 'to'>>(null);
 	const links = useSignal<LinkData[]>([]);
 	const allLinks = useComputed(() => (links.value as LinkProps[]).concat(currentLink.value as LinkProps ?? []));
+
+	useEffect(async () => {
+		const projectData = await pb.collection('projects')
+			.getFirstListItem(pb.filter('name = {:project} && owner.username = {:user}', { project, user }));
+		const filter = pb.filter('project.id = {:id}', { id: projectData.id });
+		const projectNodes = await pb.collection('nodes').getFullList({ filter });
+		const projectLinks = await pb.collection('links').getFullList({ filter });
+		console.log(projectNodes);
+		console.log(projectLinks);
+		const instances = projectNodes.map(node => instantiateNode(node.x, node.y, node.name));
+		nodes.value = nodes.value.concat(instances);
+	}, []);
 
 	const onOutMouseDown: SocketHandler = (nodeId, socket, event) => {
 		event.stopPropagation();
@@ -87,7 +93,7 @@ export const NodeEditor = () => {
 		pos.x -= svgX;
 		pos.y -= svgY;
 		const node = nodes.value.find(x => x.id === nodeId);
-		if (!node) throw new Error();
+		if (!node) throw new Error('no node for mousedown id');
 
 		const xOffs = (pos.x - offsetX.value) / scale.value - node.x.value;
 		const yOffs = (pos.y - offsetY.value) / scale.value - node.y.value;
@@ -122,7 +128,7 @@ export const NodeEditor = () => {
 		const i = links.value.findIndex(l => l.to.nodeId === nodeId && l.to.socket === socket);
 		if (i == -1) return;
 		const node = nodes.value.find(x => x.id === nodeId);
-		if (!node) throw new Error();
+		if (!node) throw new Error('no node for inmousedown id');
 
 		const svgRect = svgRef.current?.getBoundingClientRect();
 		const svgX = svgRect?.x ?? 0;
@@ -159,7 +165,7 @@ export const NodeEditor = () => {
 		event.stopPropagation();
 		const fromNode = nodes.value.find(x => x.id === currentLink.value!.from.nodeId);
 		const node = nodes.value.find(x => x.id === nodeId);
-		if (!node || !fromNode) throw new Error();
+		if (!node || !fromNode) throw new Error('no nodes for inmouseup ids');
 
 		const svgRect = svgRef.current?.getBoundingClientRect();
 		const svgX = svgRect?.x ?? 0;
