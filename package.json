@@ -3,12 +3,13 @@
   "type": "module",
   "scripts": {
     "check": "tsc",
-    "dev": "esbuild src/index.tsx --loader:.svg=dataurl --loader:.wasm=file --bundle --sourcemap --format=esm --outdir=public --watch --servedir=public --serve-fallback=public/index.html",
+    "dev": "esbuild src/index.tsx --loader:.svg=dataurl --loader:.wasm=file --loader:.woff2=file --bundle --sourcemap --format=esm --outdir=public --watch --servedir=public --serve-fallback=public/index.html",
     "asbuild:debug": "asc assembly/index.ts --target debug",
     "asbuild:release": "asc assembly/index.ts --target release",
-    "build": "rm -rf dist && cp -r public dist && esbuild src/index.tsx --loader:.svg=dataurl --loader:.wasm=file --bundle --minify --format=esm --outdir=dist"
+    "build": "rm -rf dist && cp -r public dist && esbuild src/index.tsx --loader:.svg=dataurl --loader:.wasm=file --loader:.woff2=file --bundle --minify --format=esm --outdir=dist"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.0.17",
     "@preact/signals": "^1.2.2",
     "pocketbase": "^0.21.1",
     "preact": "^10.19.6",

@@ -1,7 +1,4 @@
-@font-face {
-	font-family: 'Inter';
-	src: url('Inter.ttf');
-}
+@import '@fontsource-variable/inter';
 
 :root {
 	--base: hsl(0, 0%, 10%);
