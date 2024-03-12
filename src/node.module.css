@@ -46,10 +46,10 @@
 		padding-left: 6px;
 		margin-bottom: 4px;
 		border-radius: 6px 6px 0 0;
-		list-style-image: url('assets/down-arrow.svg');
+		list-style-image: url('icons/chevron-down.svg');
 	}
 	&:not([open]) summary {
-		list-style-image: url('assets/right-arrow.svg');
+		list-style-image: url('icons/chevron-right.svg');
 	}
 
 	ul {

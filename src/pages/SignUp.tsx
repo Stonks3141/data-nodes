@@ -26,28 +26,31 @@ export const SignUp = () => {
 	};
 
 	return (
-		<main class="container">
-			<article>
+		<main>
 				<form onSubmit={onSubmit}>
+					<h1>Sign Up</h1>
+					<p>
+						Already have an account? <a href="/login">Log in</a>
+					</p>
+					<hr />
 					<label>
-						Username:
-						<input type="text" value={username} onInput={e => username.value = e.target.value} />
+						Username
+						<input type="text" placeholder="Username" value={username} onInput={e => username.value = e.target.value} />
 					</label>
 					<label>
-						Email:
-						<input type="text" value={email} onInput={e => email.value = e.target.value} />
+						Email
+						<input type="text" placeholder="Email" value={email} onInput={e => email.value = e.target.value} />
 					</label>
 					<label>
-						Password:
-						<input type="password" value={password} onInput={e => password.value = e.target.value} />
+						Password
+						<input type="password" placeholder="Password" value={password} onInput={e => password.value = e.target.value} />
 					</label>
 					<label>
-						Confirm Password:
-						<input type="password" value={confirm} onInput={e => confirm.value = e.target.value} />
+						Confirm password
+						<input type="password" placeholder="Confirm password" value={confirm} onInput={e => confirm.value = e.target.value} />
 					</label>
-					<button>Sign Up</button>
+					<input type="submit" value="Continue" />
 				</form>
-			</article>
 		</main>
 	);
 };

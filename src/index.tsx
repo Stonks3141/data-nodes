@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo } from 'preact/hooks';
 import { Router } from 'preact-router';
 import PocketBase from 'pocketbase';
 import { Pb } from './pb.ts';
@@ -11,6 +11,13 @@ export const App = () => {
 	const pb = useMemo(() => new PocketBase(`https://${window.location.hostname}:8080/`));
 	return (
 		<Pb.Provider value={pb}>
+			<header>
+				<a class="title action" href="/">DataNodes</a>
+				<nav>
+					<a class="action" href="/login">Log In</a>
+					<a class="action" href="/signup">Sign Up</a>
+				</nav>
+			</header>
 			<Router>
 				<Home path="/" />
 				<SignUp path="/signup" />

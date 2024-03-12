@@ -18,16 +18,23 @@ export const LogIn = () => {
 	};
 
 	return (
+		<main>
 		<form onSubmit={onSubmit}>
+			<h1>Log In</h1>
+			<p>
+				Don't have an account? <a href="/signup">Sign up</a>
+			</p>
+			<hr />
 			<label>
-				Email:
-				<input type="text" value={email} onInput={e => email.value = e.target.value} />
+				Email
+				<input type="text" placeholder="Email" value={email} onInput={e => email.value = e.target.value} />
 			</label>
 			<label>
-				Password:
-				<input type="password" value={password} onInput={e => password.value = e.target.value} />
+				Password
+				<input type="password" placeholder="Password" value={password} onInput={e => password.value = e.target.value} />
 			</label>
-			<button>Log In</button>
+			<input type="submit" value="Continue" />
 		</form>
+		</main>
 	);
 };
