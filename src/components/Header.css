@@ -1,0 +1,21 @@
+@scope (.__Header) {
+	:scope {
+		height: 3rem;
+		border-bottom: 1px solid var(--overlay);
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+
+		> .title {
+			font-weight: 500;
+			width: fit-content;
+		}
+
+		nav {
+			height: 100%;
+			display: flex;
+			flex-direction: row;
+		}
+	}
+}

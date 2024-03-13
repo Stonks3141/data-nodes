@@ -1,0 +1,9 @@
+@scope (.__ArrowButton) {
+	:scope {
+		margin-top: 1rem;
+		padding: 0 1rem;
+		background-image: url('../icons/arrow-right.svg');
+		background-position: right 1rem center;
+		background-repeat: no-repeat;
+	}
+}

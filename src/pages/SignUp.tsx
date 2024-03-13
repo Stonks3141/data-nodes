@@ -1,9 +1,10 @@
 import { useContext } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
-import { Pb } from '../pb.ts';
+import { Pb } from '../context.ts';
+import { TextInput, ArrowButton, Form, FormLabel, Content } from '../components';
 
-export const SignUp = () => {
+const SignUp = () => {
 	const pb = useContext(Pb);
 
 	const username = useSignal('');
@@ -26,31 +27,33 @@ export const SignUp = () => {
 	};
 
 	return (
-		<main>
-				<form onSubmit={onSubmit}>
-					<h1>Sign Up</h1>
-					<p>
-						Already have an account? <a href="/login">Log in</a>
-					</p>
-					<hr />
-					<label>
-						Username
-						<input type="text" placeholder="Username" value={username} onInput={e => username.value = e.target.value} />
-					</label>
-					<label>
-						Email
-						<input type="text" placeholder="Email" value={email} onInput={e => email.value = e.target.value} />
-					</label>
-					<label>
-						Password
-						<input type="password" placeholder="Password" value={password} onInput={e => password.value = e.target.value} />
-					</label>
-					<label>
-						Confirm password
-						<input type="password" placeholder="Confirm password" value={confirm} onInput={e => confirm.value = e.target.value} />
-					</label>
-					<input type="submit" value="Continue" />
-				</form>
-		</main>
+		<Content>
+			<Form onSubmit={onSubmit}>
+				<h1>Sign Up</h1>
+				<p>
+					Already have an account? <a href="/login">Log in</a>
+				</p>
+				<hr />
+				<FormLabel>
+					Username
+					<TextInput placeholder="Username" signal={username} />
+				</FormLabel>
+				<FormLabel>
+					Email
+					<TextInput placeholder="Email" signal={email} />
+				</FormLabel>
+				<FormLabel>
+					Password
+					<TextInput type="password" placeholder="Password" signal={password} />
+				</FormLabel>
+				<FormLabel>
+					Confirm password
+					<TextInput type="password" placeholder="Confirm password" signal={confirm} />
+				</FormLabel>
+				<ArrowButton>Continue</ArrowButton>
+			</Form>
+		</Content>
 	);
 };
+
+export default SignUp;

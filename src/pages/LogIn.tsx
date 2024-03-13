@@ -1,9 +1,10 @@
 import { useContext } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
-import { Pb } from '../pb.ts';
+import { Pb } from '../context.ts';
+import { TextInput, ArrowButton, FormLabel, Content, Form } from '../components';
 
-export const LogIn = () => {
+const LogIn = () => {
 	const pb = useContext(Pb);
 
 	const email = useSignal('');
@@ -18,23 +19,25 @@ export const LogIn = () => {
 	};
 
 	return (
-		<main>
-		<form onSubmit={onSubmit}>
-			<h1>Log In</h1>
-			<p>
-				Don't have an account? <a href="/signup">Sign up</a>
-			</p>
-			<hr />
-			<label>
-				Email
-				<input type="text" placeholder="Email" value={email} onInput={e => email.value = e.target.value} />
-			</label>
-			<label>
-				Password
-				<input type="password" placeholder="Password" value={password} onInput={e => password.value = e.target.value} />
-			</label>
-			<input type="submit" value="Continue" />
-		</form>
-		</main>
+		<Content>
+			<Form onSubmit={onSubmit}>
+				<h1>Log In</h1>
+				<p>
+					Don't have an account? <a href="/signup">Sign up</a>
+				</p>
+				<hr />
+				<FormLabel>
+					Email
+					<TextInput placeholder="Email" signal={email} />
+				</FormLabel>
+				<FormLabel>
+					Password
+					<TextInput type="password" placeholder="Email" signal={email} />
+				</FormLabel>
+				<ArrowButton>Continue</ArrowButton>
+			</Form>
+		</Content>
 	);
 };
+
+export default LogIn;

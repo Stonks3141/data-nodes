@@ -1,9 +1,10 @@
 import { useContext, useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
-import { Pb } from '../pb.ts';
+import { Pb } from '../context.ts';
+import { TextInput, Button, Form, FormLabel, ContainedList, Content } from '../components';
 
-export const ProjectsList = ({ user }) => {
+const ProjectsList = ({ user }) => {
 	console.log(user);
 	const pb = useContext(Pb);
 	const projects = useSignal(null);
@@ -30,22 +31,22 @@ export const ProjectsList = ({ user }) => {
 		);
 	}
 	return (
-		<main class="container">
+		<Content>
 			<h1>{user}'s Projects</h1>
-			<form onSubmit={onCreateProject}>
-				<fieldset class="group">
-					<label>
-						Name
-						<input type="text" placeholder="Project name" value={projectName} onInput={e => projectName.value = e.target.value} />
-					</label>
-					<input type="submit" value="Create project" />
-				</fieldset>
-			</form>
-			<ul class="contained">
+			<Form onSubmit={onCreateProject}>
+				<FormLabel>
+					Name
+					<TextInput placeholder="Project name" signal={projectName} />
+				</FormLabel>
+				<Button>Create project</Button>
+			</Form>
+			<ContainedList>
 				{projects.value.items.map(p => (
-					<li><a class="action" href={`/${user}/${p.name}`}>{p.name}</a></li>
+					<li><Button kind="ghost" href={`/${user}/${p.name}`}>{p.name}</Button></li>
 				))}
-			</ul>
-		</main>
+			</ContainedList>
+		</Content>
 	);
 };
+
+export default ProjectsList;

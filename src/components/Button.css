@@ -1,0 +1,54 @@
+@scope (.__Button) {
+	:scope {
+		width: 100%;
+		min-width: fit-content;
+		height: 3rem;
+		padding: 0 1rem;
+
+		/* Necessary for <a> */
+		display: flex;
+		align-items: center;
+
+		font-size: 1rem;
+		text-align: start;
+		text-decoration: none;
+
+		cursor: pointer;
+
+		border: 1px solid var(--button-border, var(--button-base));
+		background-color: var(--button-base);
+		color: var(--button-text);
+
+		&:hover {
+			background-color: var(--button-hover);
+			color: var(--button-hover-text, var(--button-text));
+		}
+
+		&:focus {
+			outline: 2px solid var(--primary);
+			border-color: var(--base);
+			background-color: var(--button-focus, var(--button-base));
+			color: var(--button-focus-text, var(--button-text));
+		}
+
+		&.primary {
+			--button-base: var(--primary);
+			--button-text: var(--text);
+			--button-hover: color-mix(in srgb, var(--text) 10%, var(--button-base));
+		}
+		&.outline {
+			--button-base: transparent;
+			--button-text: var(--primary);
+			--button-border: var(--primary);
+			--button-hover: var(--primary);
+			--button-hover-text: var(--text);
+			--button-focus: var(--button-hover);
+			--button-focus-text: var(--button-hover-text);
+		}
+		&.ghost {
+			--button-base: transprent;
+			--button-text: var(--text);
+			--button-hover: var(--surface);
+		}
+	}
+}

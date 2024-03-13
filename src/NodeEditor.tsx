@@ -56,7 +56,7 @@ interface LinkData extends LinkProps {
 	to: { nodeId: number, socket: string };
 }
 
-export const NodeEditor = ({ user, project }) => {
+const NodeEditor = ({ user, project }) => {
 	const pb = useContext(Pb);
 
 	const offsetX = useSignal(0);
@@ -270,3 +270,5 @@ export const NodeEditor = ({ user, project }) => {
 		</>
 	);
 };
+
+export default NodeEditor;

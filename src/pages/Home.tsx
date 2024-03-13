@@ -1,8 +1,12 @@
-export const Home = () => {
+import { Content } from '../components';
+
+const Home = () => {
 	return (
-		<header>
-			<a href="/signup">Sign Up</a>
-			<a href="/login">Log In</a>
-		</header>
+		<Content>
+			<p><a href="/play">Try Now</a></p>
+			<p><a href="/signup">Create Account</a></p>
+		</Content>
 	);
 };
+
+export default Home;
