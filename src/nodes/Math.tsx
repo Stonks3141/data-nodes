@@ -1,5 +1,6 @@
+import { NodeShell, InputNumber, InputSelect, OutputNumber } from '../components/nodes';
+import type { NodeComponentProps, NodeInfo } from '../node.ts';
 import { mathS, mathV, mathSS, mathSV, mathVS, mathVV } from '../wasm.ts';
-import { NodeShell, InputNumber, InputSelect, OutputNumber, NodeComponentProps, NodeInfo } from '../node.tsx';
 
 export enum MathOpFunc {
 	Add = 'Add',

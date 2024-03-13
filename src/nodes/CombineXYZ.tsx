@@ -1,4 +1,5 @@
-import { NodeShell, InputNumber, OutputVector, NodeComponentProps, NodeInfo } from '../node.tsx';
+import { NodeShell, InputNumber, OutputVector } from '../components/nodes';
+import type { NodeComponentProps, NodeInfo } from '../node.ts';
 
 export interface CombineXYZInputs {
 	x: number;

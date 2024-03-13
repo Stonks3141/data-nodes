@@ -1,4 +1,5 @@
-import { NodeShell, InputNumber, InputInteger, OutputNumber, NodeComponentProps, NodeInfo } from '../node.tsx';
+import { NodeShell, InputNumber, InputInteger, OutputNumber } from '../components/nodes';
+import type { NodeComponentProps, NodeInfo } from '../node.ts';
 import { linspace } from '../wasm.ts';
 
 export interface LinspaceInputs {

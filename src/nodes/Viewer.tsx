@@ -1,4 +1,5 @@
-import { NodeShell, InputAny, NodeComponentProps, NodeInfo } from '../node.tsx';
+import { NodeShell, InputAny } from '../components/nodes';
+import type { NodeComponentProps, NodeInfo } from '../node.ts';
 
 export interface ViewerInputs {
 	value: any;

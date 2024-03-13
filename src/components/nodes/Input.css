@@ -1,0 +1,103 @@
+@scope (.__Input) {
+	:scope {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 4px 0;
+
+		.__Output + & {
+			padding-top: 8px;
+		}
+
+		input {
+			background-color: var(--overlay);
+			border: none;
+			border-radius: 4px;
+			outline: none;
+			color: var(--text);
+			font-size: 1em;
+			text-align: right;
+			width: 100%;
+			max-width: 200px;
+			margin-right: 12px;
+			padding-top: 3px;
+			padding-bottom: 2px;
+
+			.linked & {
+				display: none;
+			}
+		}
+	}
+}
+
+@scope (.__InputNum) {
+	& + & {
+		padding-top: 0;
+	}
+
+	:scope {
+		--socket-color: var(--data-float);
+
+		span {
+			position: relative;
+			left: 8px;
+			width: 0;
+			white-space: nowrap;
+			padding-bottom: 2px;
+		}
+	}
+}
+
+@scope (.__InputVector) {
+	:scope {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1px;
+		--socket-color: var(--data-vector);
+
+		& :first-child {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 2px;
+			margin-bottom: 4px;
+			.linked & {
+				margin-bottom: 0;
+			}
+		}
+
+		input {
+			width: 89%;
+			margin-left: 8px;
+			margin-right: 16px;
+
+			&:nth-child(2) { border-radius: 4px 4px 0 0 }
+			&:nth-child(3) { border-radius: 0 }
+			&:nth-child(4) { border-radius: 0 0 4px 4px }
+
+			.linked & {
+				display: none;
+			}
+		}
+	}
+}
+
+@scope (.__InputSelect) {
+	:scope {
+		--socket-color: var(--data-float);
+
+		select {
+			background-color: color-mix(in srgb, var(--base) 50%, var(--surface));
+			color: var(--text);
+			border: 1px solid color-mix(in srgb, var(--overlay) 50%, var(--surface));
+			border-radius: 4px;
+			width: 100%;
+			margin-right: 12px;
+			padding: 3px 1px;
+
+			.linked & {
+				display: none;
+			}
+		}
+	}
+}

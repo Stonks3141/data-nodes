@@ -1,0 +1,20 @@
+@scope (.__Output) {
+	:scope {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		padding: 4px 0;
+	}
+}
+
+@scope (.__OutputNumber) {
+	:scope {
+		--socket-color: var(--data-float);
+	}
+}
+
+@scope (.__OutputVector) {
+	:scope {
+		--socket-color: var(--data-vector);
+	}
+}

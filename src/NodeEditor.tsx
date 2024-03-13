@@ -1,8 +1,9 @@
 import { useContext, useEffect, useMemo, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
 import { Pb } from './context.ts';
+import { SocketHandlers } from './node.ts';
 import { nodeRegistry } from './nodes';
-import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
+import type { SocketHandler, NodeInfo } from './node.tsx';
 import { InputSocket } from './dataflow.ts';
 import { Toolbar, ButtonMenu, MenuItem } from './components';
 import './NodeEditor.css';
@@ -37,10 +38,7 @@ const Link = ({ fromX, fromY, toX, toY }: LinkProps) => {
 	const c1x = fromX.value + Math.abs(toX.value - fromX.value) / 3;
 	const c2x = toX.value - Math.abs(toX.value - fromX.value) / 3;
 	return (
-		<path
-			class={styles.link}
-			d={`M ${fromX} ${fromY} C ${c1x} ${fromY} ${c2x} ${toY} ${toX} ${toY}`}
-		/>
+		<path class="link" d={`M ${fromX} ${fromY} C ${c1x} ${fromY} ${c2x} ${toY} ${toX} ${toY}`} />
 	);
 };
 
@@ -78,8 +76,6 @@ const NodeEditor = ({ user, project }) => {
 		const filter = pb.filter('project.id = {:id}', { id: projectData.id });
 		const projectNodes = await pb.collection('nodes').getFullList({ filter });
 		const projectLinks = await pb.collection('links').getFullList({ filter });
-		console.log(projectNodes);
-		console.log(projectLinks);
 		const instances = projectNodes.map(node => instantiateNode(node.x, node.y, node.name));
 		nodes.value = nodes.value.concat(instances);
 	}, []);

@@ -1,4 +1,5 @@
-import { NodeShell, InputAny, InputNumber, NodeComponentProps, NodeInfo } from '../node.tsx';
+import { NodeShell, InputAny, InputNumber } from '../components/nodes';
+import type { NodeComponentProps, NodeInfo } from '../node.ts';
 import { useComputed } from '@preact/signals';
 
 export interface PlotInputs {

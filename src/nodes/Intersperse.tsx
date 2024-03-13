@@ -1,4 +1,5 @@
-import { NodeShell, InputArray, OutputNumber, NodeComponentProps, NodeInfo } from '../node.tsx';
+import { NodeShell, InputArray, OutputNumber } from '../components/nodes';
+import type { NodeComponentProps, NodeInfo } from '../node.ts';
 import { intersperse } from '../wasm.ts';
 
 export interface IntersperseInputs {

@@ -1,0 +1,47 @@
+@scope (.__NodeShell) {
+	:scope {
+		width: 0;
+		height: 0;
+		overflow: visible;
+
+		> details {
+			background-color: var(--surface);
+			min-width: 180px;
+			width: fit-content;
+			font-size: 0.9rem;
+			margin: 4px;
+			padding-bottom: 8px;
+			display: flex;
+			flex-direction: column;
+			border-radius: 6px;
+			user-select: none;
+			--shadow-color: 0deg 0% 0%;
+			box-shadow:
+				0.1px 0.4px 0.6px hsl(var(--shadow-color) / 0.04),
+				0.5px 3.3px 4.8px -0.2px hsl(var(--shadow-color) / 0.15),
+				1.4px 10.2px 14.7px -0.5px hsl(var(--shadow-color) / 0.27);
+
+			&:focus-within {
+				outline: 1px white solid;
+			}
+
+			summary {
+				background-color: var(--primary);
+				padding: 3px;
+				padding-left: 6px;
+				margin-bottom: 4px;
+				border-radius: 6px 6px 0 0;
+				list-style-image: url('../../icons/chevron-down.svg');
+			}
+			&:not([open]) summary {
+				list-style-image: url('../../icons/chevron-right.svg');
+			}
+
+			ul {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+		}
+	}
+}
