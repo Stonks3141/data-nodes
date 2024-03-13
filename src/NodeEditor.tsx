@@ -5,7 +5,7 @@ import { nodeRegistry } from './nodes';
 import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
 import { InputSocket } from './dataflow.ts';
 import { Toolbar } from './Toolbar.tsx';
-import styles from './NodeEditor.module.css';
+import './NodeEditor.css';
 
 export const nodeFactory = () => {
 	let nextNodeId = 0;
@@ -234,11 +234,8 @@ const NodeEditor = ({ user, project }) => {
 	};
 
 	return (
-		<>
-		<header>
-			<Toolbar nodes={nodeRegistry} onNodeAdded={onNodeAdded} />
-		</header>
-		<main>
+		<div class="__NodeEditor">
+		<Toolbar nodes={nodeRegistry} onNodeAdded={onNodeAdded} />
 		<svg width="100vw" height="100vh" ref={svgRef} onMouseDown={onBgMouseDown} onWheel={onBgWheel}>
 			<pattern
 				id="bg-grid-major"
@@ -266,8 +263,7 @@ const NodeEditor = ({ user, project }) => {
 				</SocketHandlers.Provider>
 			</g>
 		</svg>
-		</main>
-		</>
+		</div>
 	);
 };
 

@@ -1,0 +1,18 @@
+@scope (.__NodeEditor) {
+	:scope {
+		--base: #122236;
+		--surface: #242424;
+		--overlay: #484848;
+		--primary: #1c4c87;
+	
+		--data-any: #36c965;
+		--data-float: #a0a0a0;
+		--data-vector: #5e29d9;
+	}
+	
+	.link {
+		fill: none;
+		stroke: var(--data-float);
+		stroke-width: 2;
+	}
+}

@@ -3,7 +3,7 @@ import { useContext } from 'preact/hooks';
 import { batch, Signal } from '@preact/signals';
 import { InputSocket } from './dataflow.ts';
 import { cls } from './util.ts';
-import styles from './node.module.css';
+import './node.css';
 
 export type SocketHandler = (nodeId: number, socket: string, event: MouseEvent) => void;
 export interface SocketHandlers {
@@ -74,7 +74,7 @@ export interface InputProps<T> {
 
 export const InputAny = ({ name, label }: Omit<InputProps<any>, 'value'>) => {
 	return (
-		<li class={cls(styles.in)}>
+		<li class="in">
 			<InSocket name={name} />
 			{label}
 		</li>
@@ -83,7 +83,7 @@ export const InputAny = ({ name, label }: Omit<InputProps<any>, 'value'>) => {
 
 export const InputArray = ({ name, label }: Omit<InputProps<any>, 'value'>) => {
 	return (
-		<li class={cls(styles.in, styles.number)}>
+		<li class="in number">
 			<InSocket name={name} />
 			{label}
 		</li>
@@ -95,7 +95,7 @@ const InputNum = (parseFunc: (string) => number) => ({ name, label, value }: Inp
 		value.value = parseFunc((event.target as HTMLInputElement).value);
 	}
 	return (
-		<li class={cls(styles.in, styles.number, value.link.value && styles.linked)}>
+		<li class={'in number' + (value.link.value ? ' linked' : '')}>
 			<InSocket name={name} />
 			<span>{label}</span>
 			<input type="number" value={value.manual.value} onInput={onInput} />
@@ -113,7 +113,7 @@ export const InputVector = ({ name, label, value }: InputProps<[number, number, 
 		value.value = newValue;
 	};
 	return (
-		<li class={cls(styles.in, styles.vector, value.link.value && styles.linked)}>
+		<li class={'in vector' + (value.link.value ? ' linked' : '')}>
 			<div>
 				<InSocket name={name} />
 				{label}
@@ -134,7 +134,7 @@ export const InputSelect = ({ name, label, value, options }: InputSelectProps) =
 		value.value = (event.target as HTMLSelectElement).value;
 	}
 	return (
-		<li class={cls(styles.in, styles.select, value.link.value && styles.linked)}>
+		<li class={'in select' + (value.link.value ? ' linked' : '')}>
 			<InSocket name={name} />
 			<select aria-label={label} onChange={onChange}>
 				{Array.isArray(options)
@@ -157,7 +157,7 @@ export interface OutputProps {
 
 const Output = ({ name, label, type }: OutputProps & { type: string }) => {
 	return (
-		<li class={cls(styles.out, styles[type])}>
+		<li class={'out ' + type}>
 			{label}
 			<OutSocket name={name} />
 		</li>
@@ -194,8 +194,8 @@ export const NodeShell = ({ id, name, x, y, children }: NodeShellProps) => {
 	};
 
 	return (
-		<foreignObject x={x} y={y} width="0" height="0" class={styles.foreignObject}>
-			<details open tabindex={0} class={styles.node} onMouseDown={onMouseDown}>
+		<foreignObject x={x} y={y} width="0" height="0" class="__NodeShell">
+			<details open tabindex={0} class="node" onMouseDown={onMouseDown}>
 				<summary><span onClick={e => e.stopPropagation()}>{name}</span></summary>
 				<ul>
 					<NodeId.Provider value={id}>
