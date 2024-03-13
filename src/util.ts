@@ -1,2 +1,7 @@
-export const cls = (...classes: Array<string | false | null | undefined>) =>
-	classes.filter(c => c).join(' ');
+import { route } from 'preact-router';
+import PocketBase from 'pocketbase';
+
+export const logOut = (pb: PocketBase) => {
+	pb.authStore.clear();
+	route('/login');
+};

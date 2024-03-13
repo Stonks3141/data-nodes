@@ -12,11 +12,6 @@ export const App = () => {
 	const pb = useMemo(() => new PocketBase(`/`));
 	return (
 		<Pb.Provider value={pb}>
-			<Header>
-				<Button kind="ghost" href="/play">Try Now</Button>
-				<Button kind="ghost" href="/login">Log In</Button>
-				<Button kind="ghost" href="/signup">Sign Up</Button>
-			</Header>
 			<Router>
 				<Home path="/" />
 				<SignUp path="/signup" />

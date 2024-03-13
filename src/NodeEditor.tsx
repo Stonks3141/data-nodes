@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
-import { Pb } from './pb.ts';
+import { Pb } from './context.ts';
 import { nodeRegistry } from './nodes';
 import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
 import { InputSocket } from './dataflow.ts';

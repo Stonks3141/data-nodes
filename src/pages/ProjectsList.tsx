@@ -2,7 +2,8 @@ import { useContext, useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
 import { Pb } from '../context.ts';
-import { TextInput, Button, Form, FormLabel, ContainedList, Content } from '../components';
+import { logOut } from '../util.ts';
+import { Header, Content, ContainedList, Form, FormLabel, TextInput, Button } from '../components';
 
 const ProjectsList = ({ user }) => {
 	console.log(user);
@@ -25,27 +26,31 @@ const ProjectsList = ({ user }) => {
 		route(`/${user}/${project.name}`);
 	};
 
-	if (projects.value === null) {
-		return (
-			<p>Loading...</p>
-		);
-	}
 	return (
-		<Content>
-			<h1>{user}'s Projects</h1>
-			<Form onSubmit={onCreateProject}>
-				<FormLabel>
-					Name
-					<TextInput placeholder="Project name" signal={projectName} />
-				</FormLabel>
-				<Button>Create project</Button>
-			</Form>
-			<ContainedList>
-				{projects.value.items.map(p => (
-					<li><Button kind="ghost" href={`/${user}/${p.name}`}>{p.name}</Button></li>
-				))}
-			</ContainedList>
-		</Content>
+		<>
+			<Header>
+				<Button kind="ghost" href="/account">My Account</Button>
+				<Button kind="ghost" onClick={() => logOut(pb)}>Log Out</Button>
+			</Header>
+			<Content>
+				<h1>{user}'s Projects</h1>
+				<Form onSubmit={onCreateProject}>
+					<FormLabel>
+						Name
+						<TextInput placeholder="Project name" signal={projectName} />
+					</FormLabel>
+					<Button>Create project</Button>
+				</Form>
+				{projects.value === null
+					? <p>Loading...</p>
+					: <ContainedList>
+							{projects.value.items.map(p => (
+								<li><Button kind="ghost" href={`/${user}/${p.name}`}>{p.name}</Button></li>
+							))}
+						</ContainedList>
+				}
+			</Content>
+		</>
 	);
 };
 
