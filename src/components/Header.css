@@ -3,9 +3,9 @@
 		height: 3rem;
 		border-bottom: 1px solid var(--overlay);
 		display: flex;
-		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		--button-height: 100%;
 
 		> .title {
 			font-weight: 500;
@@ -15,7 +15,6 @@
 		nav {
 			height: 100%;
 			display: flex;
-			flex-direction: row;
 		}
 	}
 }

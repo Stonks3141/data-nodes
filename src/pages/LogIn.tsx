@@ -20,7 +20,7 @@ const LogIn = () => {
 
 	return (
 		<>
-			<Header>
+			<Header title="DataNodes">
 				<Button kind="ghost" href="/play">Try Now</Button>
 				<Button kind="ghost" href="/signup">Sign Up</Button>
 			</Header>

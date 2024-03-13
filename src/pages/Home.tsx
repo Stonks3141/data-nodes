@@ -3,7 +3,7 @@ import { Header, Content, Button } from '../components';
 const Home = () => {
 	return (
 		<>
-			<Header>
+			<Header title="DataNodes">
 				<Button kind="ghost" href="/play">Try Now</Button>
 				<Button kind="ghost" href="/login">Log In</Button>
 				<Button kind="ghost" href="/signup">Sign Up</Button>

@@ -4,14 +4,14 @@ import './Header.css';
 
 export interface HeaderProps {
 	children: ComponentChildren;
+	class?: string;
+	title: string;
 }
 
-const Header = ({ children }: HeaderProps) => {
+const Header = ({ children, title, ...props }: HeaderProps) => {
 	return (
-		<header class="__Header">
-			<div class="title">
-				<Button kind="ghost" href="/">DataNodes</Button>
-			</div>
+		<header class={(props.class || '') + ' __Header'}>
+			{title && <Button kind="ghost" class="title" href="/">{title}</Button>}
 			<nav>
 				{children}
 			</nav>

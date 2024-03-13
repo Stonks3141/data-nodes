@@ -28,7 +28,7 @@ const ProjectsList = ({ user }) => {
 
 	return (
 		<>
-			<Header>
+			<Header title="DataNodes">
 				<Button kind="ghost" href="/account">My Account</Button>
 				<Button kind="ghost" onClick={() => logOut(pb)}>Log Out</Button>
 			</Header>
