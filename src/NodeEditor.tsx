@@ -4,7 +4,7 @@ import { Pb } from './context.ts';
 import { nodeRegistry } from './nodes';
 import { SocketHandlers, SocketHandler, NodeInfo } from './node.tsx';
 import { InputSocket } from './dataflow.ts';
-import { Toolbar } from './Toolbar.tsx';
+import { Toolbar, ButtonMenu, MenuItem } from './components';
 import './NodeEditor.css';
 
 export const nodeFactory = () => {
@@ -229,13 +229,19 @@ const NodeEditor = ({ user, project }) => {
 		scale.value *= 1 + delta;
 	});
 
-	const onNodeAdded = (node: NodeInfo) => {
+	const addNode = (node: NodeInfo) => {
 		nodes.value = nodes.value.concat(instantiateNode(100, 100, node));
 	};
 
 	return (
 		<div class="__NodeEditor">
-		<Toolbar nodes={nodeRegistry} onNodeAdded={onNodeAdded} />
+			<Toolbar title={project}>
+				<ButtonMenu label="Add">
+					{Object.entries(nodeRegistry).map(([name, node]) => (
+						<MenuItem label={name} onClick={() => addNode(node)} />
+					))}
+				</ButtonMenu>
+			</Toolbar>
 		<svg width="100vw" height="100vh" ref={svgRef} onMouseDown={onBgMouseDown} onWheel={onBgWheel}>
 			<pattern
 				id="bg-grid-major"
@@ -244,11 +250,11 @@ const NodeEditor = ({ user, project }) => {
 				width={120 * scale.value} height={120 * scale.value}
 			>
 				<pattern id="bg-grid-minor" patternUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-					<circle cx="2" cy="2" r="1" fill="#242424" />
+					<circle cx="2" cy="2" r="1" fill="var(--surface)" />
 				</pattern>
 				<g transform={`scale(${scale})`}>
 					<rect fill="url(#bg-grid-minor)" x="0" y="0" width="100%" height="100%" />
-					<circle cx="2" cy="2" r="2" fill="#242424" />
+					<circle cx="2" cy="2" r="2" fill="var(--surface)" />
 				</g>
 			</pattern>
 			<rect fill="url(#bg-grid-major)" x="0" y="0" width="100%" height="100%" />

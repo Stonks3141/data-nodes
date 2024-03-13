@@ -2,7 +2,7 @@
 	:scope {
 		width: 100%;
 		min-width: fit-content;
-		height: 3rem;
+		height: var(--button-height, 2.5rem);
 		padding: 0 1rem;
 
 		/* Necessary for <a> */
@@ -26,6 +26,7 @@
 
 		&:focus {
 			outline: 2px solid var(--primary);
+			outline-offset: -2px;
 			border-color: var(--base);
 			background-color: var(--button-focus, var(--button-base));
 			color: var(--button-focus-text, var(--button-text));

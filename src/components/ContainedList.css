@@ -12,6 +12,7 @@
 				border-bottom: var(--border);
 			}
 			height: 3rem;
+			--button-height: 100%;
 			display: flex;
 			> * {
 				flex-grow: 1;

@@ -1,0 +1,33 @@
+@scope (.__ButtonMenu) {
+	:scope {
+		> button {
+			position: relative;
+			padding-left: 2.5rem;
+			
+			&::before {
+				content: '';
+				width: 1rem;
+				height: 1rem;
+				left: 0.75rem;
+				position: absolute;
+				background: url('../icons/chevron-right.svg');
+				background-position: left 2px center;
+				background-repeat: no-repeat;
+				transition: transform 0.2s;
+			}
+			&:has(+ :popover-open)::before {
+				transform: rotate(90deg);
+			}
+		}
+
+		[popover] {
+			inset: unset;
+			top: 0;
+			left: var(--anchor-x);
+
+			&:popover-open {
+				top: var(--anchor-y);
+			}
+		}
+	}
+}

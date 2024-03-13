@@ -10,8 +10,7 @@
 
 		&:focus {
 			outline: 2px solid var(--primary);
-			border-bottom: none;
-			margin-bottom: 2px;
+			outline-offset: -2px;
 		}
 	}
 }

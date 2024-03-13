@@ -1,0 +1,6 @@
+@scope (.__MenuItem) {
+	:scope {
+		--button-height: 2rem;
+		--surface: var(--overlay);
+	}
+}
