@@ -8,12 +8,13 @@ import { NodeEditor } from './NodeEditor.tsx';
 import './index.css';
 
 export const App = () => {
-	const pb = useMemo(() => new PocketBase(`https://${window.location.hostname}:8080/`));
+	const pb = useMemo(() => new PocketBase(`/`));
 	return (
 		<Pb.Provider value={pb}>
 			<header>
 				<a class="title action" href="/">DataNodes</a>
 				<nav>
+					< a class="action" href="/play">Try Now</a>
 					<a class="action" href="/login">Log In</a>
 					<a class="action" href="/signup">Sign Up</a>
 				</nav>

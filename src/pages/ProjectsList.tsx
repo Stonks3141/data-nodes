@@ -30,18 +30,20 @@ export const ProjectsList = ({ user }) => {
 		);
 	}
 	return (
-		<main>
-			<h1>{user}</h1>
+		<main class="container">
+			<h1>{user}'s Projects</h1>
 			<form onSubmit={onCreateProject}>
-				<label>
-					Name:
-					<input type="text" value={projectName} onInput={e => projectName.value = e.target.value} />
-				</label>
-				<button>Create roject</button>
+				<fieldset class="group">
+					<label>
+						Name
+						<input type="text" placeholder="Project name" value={projectName} onInput={e => projectName.value = e.target.value} />
+					</label>
+					<input type="submit" value="Create project" />
+				</fieldset>
 			</form>
-			<ul>
+			<ul class="contained">
 				{projects.value.items.map(p => (
-					<li><a href={`/${user}/${p.name}`}>{p.name}</a></li>
+					<li><a class="action" href={`/${user}/${p.name}`}>{p.name}</a></li>
 				))}
 			</ul>
 		</main>
