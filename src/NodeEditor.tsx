@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef } from 'preact/hooks';
+import { useContext, useEffect, useMemo, useCallback, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
 import { Pb } from './context.ts';
 import { SocketHandlers } from './node.ts';
@@ -80,7 +80,7 @@ const NodeEditor = ({ user, project }) => {
 		nodes.value = nodes.value.concat(instances);
 	}, []);
 
-	const onOutMouseDown: SocketHandler = (nodeId, socket, event) => {
+	const onOutMouseDown: SocketHandler = useCallback((nodeId, socket, event) => {
 		event.stopPropagation();
 		const svgRect = svgRef.current?.getBoundingClientRect();
 		const svgX = svgRect?.x ?? 0;
@@ -117,9 +117,9 @@ const NodeEditor = ({ user, project }) => {
 		window.addEventListener('mouseup', onMouseUp);
 
 		currentLink.value = {from: {nodeId, socket}, fromX, fromY, toX, toY};
-	};
+	}, []);
 
-	const onInMouseDown: SocketHandler = (nodeId, socket, event) => {
+	const onInMouseDown: SocketHandler = useCallback((nodeId, socket, event) => {
 		event.stopPropagation();
 		const i = links.value.findIndex(l => l.to.nodeId === nodeId && l.to.socket === socket);
 		if (i == -1) return;
@@ -154,9 +154,9 @@ const NodeEditor = ({ user, project }) => {
 
 		window.addEventListener('mousemove', onMouseMove);
 		window.addEventListener('mouseup', onMouseUp);
-	};
+	}, []);
 
-	const onInMouseUp: SocketHandler = (nodeId, socket, event) => {
+	const onInMouseUp: SocketHandler = useCallback((nodeId, socket, event) => {
 		if (!currentLink.value) return;
 		event.stopPropagation();
 		const fromNode = nodes.value.find(x => x.id === currentLink.value!.from.nodeId);
@@ -184,7 +184,7 @@ const NodeEditor = ({ user, project }) => {
 			];
 			currentLink.value = null;
 		});
-	};
+	}, []);
 
 	const socketHandlers = {
 		onOutMouseDown,
@@ -192,18 +192,18 @@ const NodeEditor = ({ user, project }) => {
 		onInMouseUp,
 	};
 
-	const onKeyDown = (event: KeyboardEvent) => {
+	const onKeyDown = useCallback((event: KeyboardEvent) => {
 		if (event.code === 'KeyX') {
 			alert('X');
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		document.addEventListener('keydown', onKeyDown);
 		return () => document.removeEventListener('keydown', onKeyDown);
 	}, []);
 
-	const onBgMouseDown = () => {
+	const onBgMouseDown = useCallback(() => {
 		const onMouseMove = (event: MouseEvent) => batch(() => {
 			offsetX.value += event.movementX;
 			offsetY.value += event.movementY;
@@ -216,18 +216,18 @@ const NodeEditor = ({ user, project }) => {
 
 		window.addEventListener('mousemove', onMouseMove);
 		window.addEventListener('mouseup', onMouseUp);
-	};
+	}, []);
 
-	const onBgWheel = (event: WheelEvent) => batch(() => {
+	const onBgWheel = useCallback((event: WheelEvent) => batch(() => {
 		const delta = event.deltaY * 0.001;
 		offsetX.value -= (event.clientX - offsetX.value) * delta;
 		offsetY.value -= (event.clientY - offsetY.value) * delta;
 		scale.value *= 1 + delta;
-	});
+	}), []);
 
-	const addNode = (node: NodeInfo) => {
+	const addNode = useCallback((node: NodeInfo) => {
 		nodes.value = nodes.value.concat(instantiateNode(100, 100, node));
-	};
+	}, []);
 
 	return (
 		<div class="__NodeEditor">

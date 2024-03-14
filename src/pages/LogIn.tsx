@@ -1,4 +1,4 @@
-import { useContext } from 'preact/hooks';
+import { useContext, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
 import { Pb } from '../context.ts';
@@ -10,13 +10,13 @@ const LogIn = () => {
 	const email = useSignal('');
 	const password = useSignal('');
 
-	const onSubmit = async (event: SubmitEvent) => {
+	const onSubmit = useCallback(async (event: SubmitEvent) => {
 		event.preventDefault();
 		await pb.collection('users').authWithPassword(email.value, password.value);
 		if (pb.authStore.isValid) {
 			route('/' + pb.authStore.model.username);
 		}
-	};
+	}, []);
 
 	return (
 		<>

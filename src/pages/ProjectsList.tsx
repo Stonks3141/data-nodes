@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'preact/hooks';
+import { useContext, useEffect, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
 import { Pb } from '../context.ts';
@@ -6,7 +6,6 @@ import { logOut } from '../util.ts';
 import { Header, Content, ContainedList, Form, FormLabel, TextInput, Button } from '../components';
 
 const ProjectsList = ({ user }) => {
-	console.log(user);
 	const pb = useContext(Pb);
 	const projects = useSignal(null);
 	const projectName = useSignal('');
@@ -17,14 +16,14 @@ const ProjectsList = ({ user }) => {
 			.then(p => projects.value = p);
 	}, []);
 
-	const onCreateProject = async (event: FormEvent) => {
+	const onCreateProject = useCallback(async (event: FormEvent) => {
 		event.preventDefault();
 		const project = await pb.collection('projects').create({
 			name: projectName.value,
 			owner: pb.authStore.model.id,
 		});
 		route(`/${user}/${project.name}`);
-	};
+	}, [user]);
 
 	return (
 		<>
