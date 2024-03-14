@@ -1,4 +1,5 @@
 import { createContext, FunctionComponent } from 'preact';
+import type { Signal } from '@preact/signals';
 import { InputSocket } from './dataflow.ts';
 
 export type SocketHandler = (nodeId: number, socket: string, event: MouseEvent) => void;

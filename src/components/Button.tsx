@@ -4,7 +4,7 @@ import './Button.css';
 export interface ButtonProps {
 	children: ComponentChildren;
 	kind?: 'primary' | 'outline' | 'ghost';
-	props: Record<string, any>;
+	[prop: string]: any;
 }
 
 const Button = ({ children, kind = 'primary', ...props }: ButtonProps) => {

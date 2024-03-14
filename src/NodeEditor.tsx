@@ -1,16 +1,25 @@
 import { useContext, useEffect, useMemo, useCallback, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
 import { Pb } from './context.ts';
-import { SocketHandlers } from './node.ts';
+import { NodeComponent, SocketHandlers } from './node.ts';
 import { nodeRegistry } from './nodes';
-import type { SocketHandler, NodeInfo } from './node.tsx';
+import type { SocketHandler, NodeInfo } from './node.ts';
 import { InputSocket } from './dataflow.ts';
 import { Toolbar, ButtonMenu, MenuItem } from './components';
 import './NodeEditor.css';
 
-export const nodeFactory = () => {
+interface NodeInstance {
+	id: number;
+	component: NodeComponent<any>;
+	x: Signal<number>;
+	y: Signal<number>;
+	inputs: Record<string, InputSocket<any>>;
+	outputs: Record<string, Signal<any>>;
+}
+
+const nodeFactory = () => {
 	let nextNodeId = 0;
-	return (x: number, y: number, { component, func, inputs }: NodeInfo<any, any>) => {
+	return (x: number, y: number, { component, func, inputs }: NodeInfo<any, any>): NodeInstance => {
 		const mapEntries = (obj: {}, f: (x: [string, any]) => [string, any]) => (
 			Object.fromEntries(Object.entries(obj).map(f))
 		);
@@ -54,17 +63,22 @@ interface LinkData extends LinkProps {
 	to: { nodeId: number, socket: string };
 }
 
-const NodeEditor = ({ user, project }) => {
-	const pb = useContext(Pb);
+export interface NodeEditorProps {
+	user: string;
+	project: string;
+}
+
+const NodeEditor = ({ user, project }: NodeEditorProps) => {
+	const pb = useContext(Pb)!;
 
 	const offsetX = useSignal(0);
 	const offsetY = useSignal(0);
 	const scale = useSignal(1);
 
 	const instantiateNode = useMemo(nodeFactory, []);
-	const svgRef = useRef(null);
+	const svgRef = useRef<SVGSVGElement | null>(null);
 
-	const nodes = useSignal([]);
+	const nodes = useSignal<NodeInstance[]>([]);
 
 	const currentLink = useSignal<null | Omit<LinkData, 'to'>>(null);
 	const links = useSignal<LinkData[]>([]);
@@ -225,7 +239,7 @@ const NodeEditor = ({ user, project }) => {
 		scale.value *= 1 + delta;
 	}), []);
 
-	const addNode = useCallback((node: NodeInfo) => {
+	const addNode = useCallback((node: NodeInfo<any, any>) => {
 		nodes.value = nodes.value.concat(instantiateNode(100, 100, node));
 	}, []);
 

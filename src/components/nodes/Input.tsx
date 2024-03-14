@@ -1,3 +1,4 @@
+import type { ComponentChildren } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { InputSocket } from '../../dataflow.ts';
 import { InSocket } from './Socket.tsx';
@@ -37,7 +38,7 @@ export const InputArray = ({ name, label }: Omit<InputProps<any>, 'value'>) => {
 	);
 };
 
-const InputNum = (parseFunc: (string) => number) => ({ name, label, value }: InputProps<number>) => {
+const InputNum = (parseFunc: (_: string) => number) => ({ name, label, value }: InputProps<number | any>) => {
 	const onInput = useCallback((event: InputEvent) => {
 		value.value = parseFunc((event.target as HTMLInputElement).value);
 	}, [value]);
@@ -77,7 +78,7 @@ export interface InputSelectProps extends InputProps<string> {
 }
 
 export const InputSelect = ({ name, label, value, options }: InputSelectProps) => {
-	const onChange = useCallback((event: InputEvent) => {
+	const onChange = useCallback((event: Event) => {
 		value.value = (event.target as HTMLSelectElement).value;
 	}, [value]);
 	return (

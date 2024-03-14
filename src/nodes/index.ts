@@ -1,4 +1,4 @@
-import type { NodeInfo } from '../node.tsx';
+import type { NodeInfo } from '../node.ts';
 import { CombineXYZNode } from './CombineXYZ.tsx';
 import { SeparateXYZNode } from './SeparateXYZ.tsx';
 import { ViewerNode } from './Viewer.tsx';
@@ -11,7 +11,7 @@ import { PlotNode } from './Plot.tsx';
 
 // TODO: ComplexMath
 
-const nodeRegistry: Record<string, NodeInfo<any>> = {
+const nodeRegistry: Record<string, NodeInfo<any, any>> = {
 	'Combine XYZ': CombineXYZNode,
 	'Separate XYZ': SeparateXYZNode,
 	'Viewer': ViewerNode,

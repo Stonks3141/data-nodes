@@ -1,26 +1,30 @@
 import { useContext, useEffect, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { route } from 'preact-router';
+import type { ListResult } from 'pocketbase';
+import type { Project } from '../types.ts';
 import { Pb } from '../context.ts';
 import { logOut } from '../util.ts';
 import { Header, Content, ContainedList, Form, FormLabel, TextInput, Button } from '../components';
 
-const ProjectsList = ({ user }) => {
-	const pb = useContext(Pb);
-	const projects = useSignal(null);
+export interface ProjectsListProps {
+	user: string;
+}
+
+const ProjectsList = ({ user }: ProjectsListProps) => {
+	const pb = useContext(Pb)!;
+	const projects = useSignal<ListResult<Project> | null>(null);
 	const projectName = useSignal('');
 
-	useEffect(() => {
-		pb.collection('projects')
-			.getList(1, 20, { sort: '-mtime' })
-			.then(p => projects.value = p);
+	useEffect(async () => {
+		projects.value = await pb.collection('projects').getList(1, 20, { sort: '-mtime' });
 	}, []);
 
-	const onCreateProject = useCallback(async (event: FormEvent) => {
+	const onCreateProject = useCallback(async (event: SubmitEvent) => {
 		event.preventDefault();
 		const project = await pb.collection('projects').create({
 			name: projectName.value,
-			owner: pb.authStore.model.id,
+			owner: pb.authStore.model!.id,
 		});
 		route(`/${user}/${project.name}`);
 	}, [user]);

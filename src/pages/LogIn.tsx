@@ -5,7 +5,7 @@ import { Pb } from '../context.ts';
 import { Header, Content, Form, TextInput, Button, ArrowButton, FormLabel } from '../components';
 
 const LogIn = () => {
-	const pb = useContext(Pb);
+	const pb = useContext(Pb)!;
 
 	const email = useSignal('');
 	const password = useSignal('');
@@ -14,7 +14,7 @@ const LogIn = () => {
 		event.preventDefault();
 		await pb.collection('users').authWithPassword(email.value, password.value);
 		if (pb.authStore.isValid) {
-			route('/' + pb.authStore.model.username);
+			route('/' + pb.authStore.model!.username);
 		}
 	}, []);
 

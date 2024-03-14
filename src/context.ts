@@ -1,4 +1,4 @@
 import { createContext } from 'preact';
-import type { PocketBase } from 'pocketbase';
+import PocketBase from 'pocketbase';
 
-export const Pb = createContext<PocketBase>();
+export const Pb = createContext<PocketBase | null>(null);

@@ -21,6 +21,6 @@ export const Fourier = ({ id, x, y, inputs }: NodeComponentProps<FourierInputs>)
 
 export const FourierNode: NodeInfo<FourierInputs, FourierOutputs> = {
 	component: Fourier,
-	func: ({ data }) => ({ data: data ? fft(data) : null }),
+	func: ({ data }) => ({ data: data ? fft(data) as Float32Array : null }),
 	inputs: { data: null },
 };

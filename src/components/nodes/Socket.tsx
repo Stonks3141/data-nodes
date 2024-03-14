@@ -1,5 +1,5 @@
 import { useContext } from 'preact/hooks';
-import { NodeId, SocketHandlers } from '../../node.ts';
+import { NodeId, SocketHandlers, SocketHandler } from '../../node.ts';
 import './Socket.css';
 
 interface SocketProps {

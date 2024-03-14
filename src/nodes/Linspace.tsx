@@ -25,6 +25,6 @@ export const Linspace = ({ id, x, y, inputs }: NodeComponentProps<LinspaceInputs
 
 export const LinspaceNode: NodeInfo<LinspaceInputs, LinspaceOutputs> = {
 	component: Linspace,
-	func: ({ start, stop, n }) => ({ data: linspace(start, stop, Math.floor(n)) }),
+	func: ({ start, stop, n }) => ({ data: linspace(start, stop, Math.floor(n)) as Float32Array }),
 	inputs: { start: 0, stop: 1, n: 10 },
 };

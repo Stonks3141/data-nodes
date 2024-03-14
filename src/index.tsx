@@ -1,15 +1,14 @@
 import { render } from 'preact';
-import { useEffect, useMemo } from 'preact/hooks';
+import { useMemo } from 'preact/hooks';
 import { Router } from 'preact-router';
 import PocketBase from 'pocketbase';
 import { Pb } from './context.ts';
 import { Home, SignUp, LogIn, ProjectsList } from './pages';
 import NodeEditor from './NodeEditor.tsx';
-import { Header, Button } from './components';
 import './index.css';
 
 export const App = () => {
-	const pb = useMemo(() => new PocketBase(`/`));
+	const pb = useMemo(() => new PocketBase(`/`), []);
 	return (
 		<Pb.Provider value={pb}>
 			<Router>

@@ -5,7 +5,7 @@ import { Pb } from '../context.ts';
 import { Header, Content, Form, FormLabel, TextInput, Button, ArrowButton } from '../components';
 
 const SignUp = () => {
-	const pb = useContext(Pb);
+	const pb = useContext(Pb)!;
 
 	const username = useSignal('');
 	const email = useSignal('');
@@ -22,7 +22,7 @@ const SignUp = () => {
 			passwordConfirm: confirm.value,
 		});
 		if (pb.authStore.isValid) {
-			route('/' + pb.authStore.model.username);
+			route('/' + pb.authStore.model!.username);
 		}
 	}, []);
 

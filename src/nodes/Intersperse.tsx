@@ -3,12 +3,12 @@ import type { NodeComponentProps, NodeInfo } from '../node.ts';
 import { intersperse } from '../wasm.ts';
 
 export interface IntersperseInputs {
-	a: Float32Array,
-	b: Float32Array,
+	a: Float32Array | null,
+	b: Float32Array | null,
 }
 
 export interface IntersperseOutputs {
-	out: Float32Array,
+	out: Float32Array | null,
 }
 
 export const Intersperse = ({ id, x, y, inputs }: NodeComponentProps<IntersperseInputs>) => {
@@ -23,6 +23,6 @@ export const Intersperse = ({ id, x, y, inputs }: NodeComponentProps<Intersperse
 
 export const IntersperseNode: NodeInfo<IntersperseInputs, IntersperseOutputs> = {
 	component: Intersperse,
-	func: ({ a, b }) => ({ out: a && b ? intersperse(a, b) : null }),
+	func: ({ a, b }) => ({ out: a && b ? intersperse(a, b) as Float32Array : null }),
 	inputs: { a: null, b: null },
 };

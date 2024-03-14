@@ -4,12 +4,12 @@ import './TextInput.css';
 
 export interface TextInputProps {
 	signal?: Signal<string>;
-	props: Record<string, any>;
+	[prop: string]: any;
 }
 
 const TextInput = ({ signal, ...props }: TextInputProps) => {
 	const onInputSignal = useCallback((event: InputEvent) => {
-		signal.value = event.target.value;
+		if (signal) signal.value = (event.target as HTMLInputElement).value;
 	}, [signal]);
 
 	return (

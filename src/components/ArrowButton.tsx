@@ -1,7 +1,9 @@
 import Button, { ButtonProps } from './Button.tsx';
 import './ArrowButton.css';
 
-const ArrowButton = ({ children, ...props }: ButtonProps) => {
+export type ArrowButtonProps = ButtonProps;
+
+const ArrowButton = ({ children, ...props }: ArrowButtonProps) => {
 	return (
 		<Button {...props} class={(props.class || '') + ' __ArrowButton'}>
 			{children}

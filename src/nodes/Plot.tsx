@@ -32,11 +32,11 @@ export const Plot = ({ id, x, y, inputs }: NodeComponentProps<PlotInputs>) => {
 		}
 	}
 
-	let xticks = [];
+	let xticks: [string, number][] = [];
 	for (let x = minX.value; x <= maxX.value; x += dx.value / xtickCount) {
 		xticks.push([x.toFixed(1), (x - minX.value) / dx.value * width]);
 	}
-	let yticks = [];
+	let yticks: [string, number][] = [];
 	for (let y = minY.value; y <= maxY.value; y += dy.value / ytickCount) {
 		yticks.push([y.toFixed(1), height - (y - minY.value) / dy.value * height]);
 	}

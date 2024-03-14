@@ -10,7 +10,7 @@ export interface ViewerOutputs {}
 export const Viewer = ({ id, x, y, inputs }: NodeComponentProps<ViewerInputs>) => {
 	let data = inputs.value.value;
 	if (ArrayBuffer.isView(data)) {
-		data = Array.from(data);
+		data = Array.from(data as Float32Array);
 	}
 	return (
 		<NodeShell name="Viewer" id={id} x={x} y={y}>

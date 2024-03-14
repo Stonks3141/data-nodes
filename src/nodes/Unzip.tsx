@@ -3,12 +3,12 @@ import type { NodeComponentProps, NodeInfo } from '../node.ts';
 import { unzip } from '../wasm.ts';
 
 export interface UnzipInputs {
-	data: Float32Array,
+	data: Float32Array | null,
 }
 
 export interface UnzipOutputs {
-	a: Float32Array,
-	b: Float32Array,
+	a: Float32Array | null,
+	b: Float32Array | null,
 }
 
 export const Unzip = ({ id, x, y, inputs }: NodeComponentProps<UnzipInputs>) => {
@@ -24,8 +24,8 @@ export const Unzip = ({ id, x, y, inputs }: NodeComponentProps<UnzipInputs>) => 
 export const UnzipNode: NodeInfo<UnzipInputs, UnzipOutputs> = {
 	component: Unzip,
 	func: ({ data }) => {
-		const out = data ? unzip(data) : null;
-		return { a: out?.slice(0, out.length/2), b: out?.slice(out.length/2) };
+		const out = data ? unzip(data) as Float32Array : null;
+		return { a: out?.slice(0, out.length/2) || null, b: out?.slice(out.length/2) || null };
 	},
 	inputs: { data: null },
 };
