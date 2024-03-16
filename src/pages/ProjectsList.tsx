@@ -16,8 +16,10 @@ const ProjectsList = ({ user }: ProjectsListProps) => {
 	const projects = useSignal<ListResult<Project> | null>(null);
 	const projectName = useSignal('');
 
-	useEffect(async () => {
-		projects.value = await pb.collection('projects').getList(1, 20, { sort: '-mtime' });
+	useEffect(() => {
+		(async () => {
+			projects.value = await pb.collection('projects').getList(1, 20, { sort: '-mtime' });
+		})();
 	}, []);
 
 	const onCreateProject = useCallback(async (event: SubmitEvent) => {
