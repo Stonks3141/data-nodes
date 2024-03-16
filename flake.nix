@@ -17,11 +17,22 @@
         ];
       };
     });
-    packages = forEachSystem (pkgs: {
+    packages = forEachSystem (pkgs: rec {
       default = pkgs.buildNpmPackage {
         pname = "webnodes";
         version = "0.1.0";
         src = ./.;
+        #forceEmptyCache = true;
+        npmDepsHash = "sha256-hiGb2+LpdxNs36aiB/aEX3MarEFidMezrmxzutulmVw=";
+      };
+      image = pkgs.dockerTools.buildLayeredImage {
+	name = "webnodes";
+	tag = "latest";
+	config.Cmd = [
+	  "${pkgs.pkgsStatic.pocketbase}/bin/pocketbase"
+	  "--http" "0.0.0.0:8000"
+	  #"--publicDir" "${default}/lib/node_modules/webnodes"
+	];
       };
     });
   };

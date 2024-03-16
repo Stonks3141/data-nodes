@@ -1,6 +1,8 @@
 {
   "name": "webnodes",
+  "version": "0.1.0",
   "type": "module",
+  "files": ["dist/"],
   "scripts": {
     "check": "tsc",
     "dev": "esbuild src/index.tsx --loader:.svg=dataurl --loader:.wasm=file --loader:.woff2=file --bundle --sourcemap --format=esm --outdir=public --watch --servedir=public --serve-fallback=public/index.html",
