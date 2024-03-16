@@ -1,11 +1,14 @@
 import { useContext, useEffect, useMemo, useCallback, useRef } from 'preact/hooks';
 import { signal, computed, batch, useSignal, useComputed, Signal } from '@preact/signals';
-import { Pb } from './context.ts';
-import { NodeComponent, SocketHandlers } from './node.ts';
-import { nodeRegistry } from './nodes';
-import type { SocketHandler, NodeInfo } from './node.ts';
-import { InputSocket } from './dataflow.ts';
-import { Toolbar, ButtonMenu, MenuItem } from './components';
+import { Pb } from '../context.ts';
+import type { Project } from '../types.ts';
+import { NodeComponent, SocketHandlers } from '../node.ts';
+import { nodeRegistry } from '../nodes';
+import type { SocketHandler, NodeInfo } from '../node.ts';
+import { InputSocket } from '../dataflow.ts';
+import Toolbar from './Toolbar.tsx';
+import ButtonMenu from './ButtonMenu.tsx';
+import MenuItem from './MenuItem.tsx';
 import './NodeEditor.css';
 
 interface NodeInstance {
@@ -17,22 +20,19 @@ interface NodeInstance {
 	outputs: Record<string, Signal<any>>;
 }
 
-const nodeFactory = () => {
-	let nextNodeId = 0;
-	return (x: number, y: number, { component, func, inputs }: NodeInfo<any, any>): NodeInstance => {
-		const mapEntries = (obj: {}, f: (x: [string, any]) => [string, any]) => (
-			Object.fromEntries(Object.entries(obj).map(f))
-		);
-		const instanceInputs = mapEntries(inputs, ([k, v]) => [k, new InputSocket(v)]);
-		const output = computed(() => func(mapEntries(instanceInputs, ([k, v]) => [k, v.value])));
-		return {
-			id: nextNodeId++,
-			component,
-			x: signal(x),
-			y: signal(y),
-			inputs: instanceInputs,
-			outputs: mapEntries(output.value, ([k, _]) => [k, computed(() => output.value[k])]),
-		};
+const instantiateNode = (id: string, x: number, y: number, { component, func, inputs }: NodeInfo<any, any>): NodeInstance => {
+	const mapEntries = (obj: {}, f: (x: [string, any]) => [string, any]) => (
+		Object.fromEntries(Object.entries(obj).map(f))
+	);
+	const instanceInputs = mapEntries(inputs, ([k, v]) => [k, new InputSocket(v)]);
+	const output = computed(() => func(mapEntries(instanceInputs, ([k, v]) => [k, v.value])));
+	return {
+		id,
+		component,
+		x: signal(x),
+		y: signal(y),
+		inputs: instanceInputs,
+		outputs: mapEntries(output.value, ([k, _]) => [k, computed(() => output.value[k])]),
 	};
 };
 
@@ -64,18 +64,16 @@ interface LinkData extends LinkProps {
 }
 
 export interface NodeEditorProps {
-	user: string;
-	project: string;
+	project: Project;
 }
 
-const NodeEditor = ({ user, project }: NodeEditorProps) => {
+const NodeEditor = ({ project }: NodeEditorProps) => {
 	const pb = useContext(Pb)!;
 
 	const offsetX = useSignal(0);
 	const offsetY = useSignal(0);
 	const scale = useSignal(1);
 
-	const instantiateNode = useMemo(nodeFactory, []);
 	const svgRef = useRef<SVGSVGElement | null>(null);
 
 	const nodes = useSignal<NodeInstance[]>([]);
@@ -84,14 +82,14 @@ const NodeEditor = ({ user, project }: NodeEditorProps) => {
 	const links = useSignal<LinkData[]>([]);
 	const allLinks = useComputed(() => (links.value as LinkProps[]).concat(currentLink.value as LinkProps ?? []));
 
-	useEffect(async () => {
-		const projectData = await pb.collection('projects')
-			.getFirstListItem(pb.filter('name = {:project} && owner.username = {:user}', { project, user }));
-		const filter = pb.filter('project.id = {:id}', { id: projectData.id });
-		const projectNodes = await pb.collection('nodes').getFullList({ filter });
-		const projectLinks = await pb.collection('links').getFullList({ filter });
-		const instances = projectNodes.map(node => instantiateNode(node.x, node.y, node.name));
-		nodes.value = nodes.value.concat(instances);
+	useEffect(() => {
+		(async () => {
+			const filter = pb.filter('project.id = {:id}', { id: project.id });
+			const projectNodes = await pb.collection('nodes').getFullList({ filter });
+			const projectLinks = await pb.collection('links').getFullList({ filter });
+			const instances = projectNodes.map(node => instantiateNode(node.id, node.x, node.y, node.name));
+			nodes.value = nodes.value.concat(instances);
+		})();
 	}, []);
 
 	const onOutMouseDown: SocketHandler = useCallback((nodeId, socket, event) => {
@@ -200,11 +198,11 @@ const NodeEditor = ({ user, project }: NodeEditorProps) => {
 		});
 	}, []);
 
-	const socketHandlers = {
+	const socketHandlers = useMemo(() => ({
 		onOutMouseDown,
 		onInMouseDown,
 		onInMouseUp,
-	};
+	}), []);
 
 	const onKeyDown = useCallback((event: KeyboardEvent) => {
 		if (event.code === 'KeyX') {
@@ -239,16 +237,18 @@ const NodeEditor = ({ user, project }: NodeEditorProps) => {
 		scale.value *= 1 + delta;
 	}), []);
 
-	const addNode = useCallback((node: NodeInfo<any, any>) => {
-		nodes.value = nodes.value.concat(instantiateNode(100, 100, node));
+	const addNode = useCallback(async (name: string, info: NodeInfo<any, any>) => {
+		const node = await pb.collection('nodes').create({ x: 100, y: 100, type: name, project: projectId, collapsed: false });
+		alert(JSON.stringify(node));
+		nodes.value = nodes.value.concat(instantiateNode(node.id, node.x, node.y, info));
 	}, []);
 
 	return (
 		<div class="__NodeEditor">
-			<Toolbar title={project}>
+			<Toolbar title={project.name}>
 				<ButtonMenu label="Add">
 					{Object.entries(nodeRegistry).map(([name, node]) => (
-						<MenuItem label={name} onClick={() => addNode(node)} />
+						<MenuItem label={name} onClick={e => addNode(name, node)} />
 					))}
 				</ButtonMenu>
 			</Toolbar>

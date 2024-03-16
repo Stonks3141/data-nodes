@@ -8,6 +8,7 @@ export { default as FormLabel     } from './FormLabel.tsx';
 export { default as Header        } from './Header.tsx';
 export { default as Menu          } from './Menu.tsx';
 export { default as MenuItem      } from './MenuItem.tsx';
+export { default as NodeEditor    } from './NodeEditor.tsx';
 export { default as TextInput     } from './TextInput.tsx';
 export { default as Toolbar       } from './Toolbar.tsx';
 
@@ -19,7 +20,8 @@ export type { ContentProps       } from './Content.tsx';
 export type { FormLabelProps     } from './FormLabel.tsx';
 export type { FormProps          } from './Form.tsx';
 export type { HeaderProps        } from './Header.tsx';
-export type { MenuItemProps      } from './MenuItem.tsx';
 export type { MenuProps          } from './Menu.tsx';
+export type { MenuItemProps      } from './MenuItem.tsx';
+export type { NodeEditorProps    } from './NodeEditor.tsx';
 export type { TextInputProps     } from './TextInput.tsx';
 export type { ToolbarProps       } from './Toolbar.tsx';

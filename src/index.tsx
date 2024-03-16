@@ -3,8 +3,7 @@ import { useMemo } from 'preact/hooks';
 import { Router } from 'preact-router';
 import PocketBase from 'pocketbase';
 import { Pb } from './context.ts';
-import { Home, SignUp, LogIn, ProjectsList } from './pages';
-import NodeEditor from './NodeEditor.tsx';
+import { Home, SignUp, LogIn, ProjectsList, Editor } from './pages';
 import './index.css';
 
 export const App = () => {
@@ -16,7 +15,7 @@ export const App = () => {
 				<SignUp path="/signup" />
 				<LogIn path="/login" />
 				<ProjectsList path="/:user" />
-				<NodeEditor path="/:user/:project" />
+				<Editor path="/:user/:project" />
 			</Router>
 		</Pb.Provider>
 	);
