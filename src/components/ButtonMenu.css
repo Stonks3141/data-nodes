@@ -3,7 +3,7 @@
 		> button {
 			position: relative;
 			padding-left: 2.5rem;
-			
+
 			&::before {
 				content: '';
 				width: 1rem;
@@ -13,20 +13,41 @@
 				background: url('../icons/chevron-right.svg');
 				background-position: left 2px center;
 				background-repeat: no-repeat;
-				transition: transform 0.2s;
 			}
+
 			&:has(+ :popover-open)::before {
 				transform: rotate(90deg);
+			}
+
+			@media not (prefers-reduced-motion) {
+				&::before {
+					transition: transform 0.2s;
+				}
 			}
 		}
 
 		[popover] {
 			inset: unset;
-			top: 0;
+			top: var(--anchor-y);
 			left: var(--anchor-x);
 
-			&:popover-open {
-				top: var(--anchor-y);
+			@media not (prefers-reduced-motion) {
+				transform: translate(0, -100%);
+				clip-path: xywh(0 100% 100% 100%);
+
+				transition-property: transform, clip-path, overlay, display;
+				transition-duration: 0.2s;
+				transition-behavior: allow-discrete;
+	
+				&:popover-open {
+					transform: none;
+					clip-path: xywh(0 0 100% 100%);
+	
+					@starting-style {
+						transform: translate(0, -100%);
+						clip-path: xywh(0 100% 100% 100%);
+					}
+				}
 			}
 		}
 	}
