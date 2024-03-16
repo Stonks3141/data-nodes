@@ -1,18 +1,34 @@
+export type Id = string;
+
+export type Relation<T> = Id | T;
+
+export interface User {
+	id: Id;
+	username: string;
+	email: string;
+}
+
 export interface Project {
-	id: string;
-	owner: string;
+	id: Id;
+	owner: Relation<User>;
 	name: string;
+	public: boolean;
 }
 
 export interface Node {
-	id: string;
+	id: Id;
+	project: Relation<Project>;
+	type: string;
 	x: number;
 	y: number;
-	name: string;
+	collapsed: boolean;
 }
 
 export interface Link {
-	id: string;
-	from: string;
-	to: string;
+	id: Id;
+	project: Relation<Project>;
+	from: Relation<Node>;
+	fromSocket: string;
+	to: Relation<Node>;
+	toSocket: string;
 }
